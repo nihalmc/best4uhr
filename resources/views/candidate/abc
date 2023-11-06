@@ -1,0 +1,25 @@
+
+<div class="container">
+    <h1>Applied Jobs</h1>
+
+    @if (count($appliedJobs) > 0)
+    <ul class="list-group">
+        @foreach($appliedJobs as $application)
+        <li class="list-group-item">
+            <h4>{{ $application->job->job_position }}</h4>
+            <p>Field of Work: {{ $application->job->field_of_work }}</p>
+            <p>Location: {{ $application->job->location }}</p>
+            <p>Applied Date: {{ $application->created_at->format('Y-m-d') }}</p>
+
+
+            <!-- Add more job details as needed -->
+        </li>
+        @endforeach
+    </ul>
+    @else
+    <p>No jobs applied yet.</p>
+    @endif
+</div>
+
+
+</div>

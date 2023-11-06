@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>International telephone input</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+</head>
+<body>
+  <!-- Your form or other HTML content goes here -->
+  <div class="form-group">
+    <label>Employer Mobile</label>
+    <div class="ls-inputicon-box">
+      <input id="mobile" class="form-control wt-form-control" name="mobile" type="tel" placeholder="Mobile Number" />
+      <i class="fs-input-icon fas fa-phone-alt"></i>
+      @error('mobile')
+        <span class="text-danger">{{ $message }}</span>
+      @enderror
+    </div>
+  </div>
+</body>
+<script>
+  const phoneInputField = document.querySelector("#mobile");
+  const phoneInput = window.intlTelInput(phoneInputField, {
+    utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+  });
+</script>
+</html>
