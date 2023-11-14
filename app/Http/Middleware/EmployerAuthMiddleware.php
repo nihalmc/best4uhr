@@ -13,7 +13,7 @@ class EmployerAuthMiddleware
         if (!Auth::guard('employer')->check()) {
             // Perform custom authentication logic for employers
             // If authentication fails, you can redirect or respond accordingly
-            return redirect()->route('employer.login');
+            return redirect()->route('home')->with('error', 'Please login to access your pages.');
         }
 
         return $next($request);

@@ -17,13 +17,6 @@
                         </div>
                         <!-- BREADCRUMB ROW -->
 
-                            <div>
-                                <ul class="wt-breadcrumb breadcrumb-style-2">
-                                    <li><a href="{{ route('home') }}">Home</a></li>
-                                    <li>Career</li>
-                                </ul>
-                            </div>
-
                         <!-- BREADCRUMB ROW END -->
                     </div>
                 </div>

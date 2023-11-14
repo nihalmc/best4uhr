@@ -50,16 +50,14 @@ class EmployerAuthController extends Controller
         return redirect()->route('home')->with('success', 'Logged out successfully.');
     }
 
-    public function showRegistrationForm()
-    {
-        return view('home'); // Replace 'employer.register' with the actual view name
-    }
 
     public function register(Request $request)
     {
         // Validate the registration data (similar to your restore method)
         $request->validate([
             'company_name' => 'required|string|max:255',
+            'contact_person' => 'required|string|max:255',
+            'address' => 'required|string|max:255' ,
             'contact_email' => 'required|email|unique:employers,contact_email',
             'mobile' => 'required|string',
             'username' => 'required|string|unique:employers,username',
@@ -69,7 +67,9 @@ class EmployerAuthController extends Controller
         // Create a new employer instance
         $employer = new Employers();
         $employer->company_name = $request->company_name;
+        $employer->contact_person = $request->contact_person;
         $employer->contact_email = $request->contact_email;
+        $employer->address = $request->address;
         $employer->mobile = $request->mobile;
         $employer->username = $request->username;
         $employer->isEmployer = true;

@@ -10,7 +10,7 @@ use App\JobStatus;
 use App\Models\Aplay_details;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
-
+use App\Models\Nationality;
 use App\Mail\ContactFormMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Http;
@@ -23,7 +23,8 @@ class HomeController extends Controller
         ->orderBy('posted_date', 'desc') // Order by posted_date in descending order
         ->take(10) // Limit the result to 10 jobs
         ->get();
-    return view('website.index' , compact('jobs'));
+         $nationalities = Nationality::all();
+    return view('website.index' , compact('jobs','nationalities'));
    }
 
     public function search(Request $request)
@@ -45,9 +46,9 @@ class HomeController extends Controller
                 return $query->where('location', 'like', '%' . $location . '%');
             })
             ->get();
-
+ $nationalities = Nationality::all();
         // Return the search results to a view
-        return view('website.index', compact('jobs'));
+        return view('website.index', compact('jobs','nationalities'));
     }
 
      public function store(Request $request)
@@ -102,9 +103,12 @@ public function indexd(Request $request)
     // Order jobs by posted_date in descending order
     $jobs = $query->orderBy('posted_date', 'desc')->paginate($jobsPerPage);
 
+    if ($request->ajax()) {
+        return response()->json(['jobs' => $jobs]);
+    }
+
     return view('website.jobs', compact('jobs', 'searchQuery'));
 }
-
 
 
  public function created($jobId)
@@ -165,19 +169,27 @@ public function indexd(Request $request)
     return redirect()->route('home.jobs')->with('success', 'Job application submitted successfully.');
 }
 
-public function show($jobId){
+public function show($jobId)
+{
+    $job = Jobs::find($jobId);
 
-    // Retrieve the job by its ID
-        $job = Jobs::find($jobId);
+    if (!$job) {
+        // Handle the case where the job with the given ID is not found
+        return abort(404); // You can customize the error response
+    }
 
-     return view('website.job-detail', compact('job',));
+    // Decode the 'nationality' field to get the selected nationalities for this job
+    $job->selectedNationalities = json_decode($job->nationality);
 
+    $nationalities = Nationality::all();
+    return view('website.job-detail', compact('job','nationalities'));
 }
 
 
-   function contact(){
 
-    return view('website.contact');
+   function contact(){
+$nationalities = Nationality::all();
+    return view('website.contact', compact('nationalities'));
    }
 
 
@@ -220,7 +232,7 @@ public function show($jobId){
             'message' => $request->message,
         ];
 
-        Mail::to('ofmailwork@gmail.com')->send(new ContactFormMail($data)); // Update with your email address
+        Mail::to('bestforuhr@gmail.com')->send(new ContactFormMail($data)); // Update with your email address
 
         return view('website.contact');
 
@@ -232,16 +244,16 @@ public function show($jobId){
    }
 
     function profile(){
-
-    return view('website.profile');
+$nationalities = Nationality::all();
+    return view('website.profile', compact('nationalities'));
    }
     function recruitments(){
-
-    return view('website.recruitments');
+$nationalities = Nationality::all();
+    return view('website.recruitments', compact('nationalities'));
    }
     function specialization(){
-
-    return view('website.specialization');
+$nationalities = Nationality::all();
+    return view('website.specialization', compact('nationalities'));
    }
 
 

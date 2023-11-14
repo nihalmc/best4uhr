@@ -12,12 +12,14 @@
                     <h2>Job Details</h2>
                     <div class="breadcrumbs"><a href="#">Home</a><a href="#">Dashboard</a><span>Job Details</span></div>
                 </div>
-
+ <a href="{{ route('admin.jobs.downloadOpenPDF') }}" class="btn text-white  site-bg-primary mb-3">Download Open Jobs (PDF)</a>
                 <!--Basic Information-->
                 <div class="panel panel-default">
                     <div class="panel-heading wt-panel-heading p-a20">
                         <h4 class="panel-tittle m-a0"><i class="fa fa-suitcase"></i>Job Details</h4>
                     </div>
+
+
                     <div class="panel-body wt-panel-body p-a20 m-b30 ">
                         <div class="twm-D_table p-a20 table-responsive">
                             <table id="jobs_bookmark_table" class="table table-bordered twm-bookmark-list-wrap">
@@ -166,8 +168,8 @@
             @endif</p>
                 <p>Gender: {{ $job->gender }}</p>
                 <p>Requirements: {{ $job->requirements }}</p>
-                <p>Posted Date: {{ $job->posted_date }}</p>
-                <p>Closing Date: {{ $job->closing_date }}</p>
+                <p>Posted Date: {{ date('d/m/Y', strtotime($job->posted_date)) }}</p>
+                <p>Closing Date: {{ date('d/m/Y', strtotime($job->closing_date )) }}</p>
                 <p style="color:
                 @if ($job->status === 'pending')
                     orange
@@ -178,27 +180,6 @@
                 {{-- Add more conditions for other status values as needed --}}
                 @endif
                 ">Status: {{ $job->status }}</p>
-                <!-- Add more job details as needed -->
-                <div>
-                    <p><strong>Best For You HR Consultancy</strong></p>
-                    <p>Office No: 203, 2nd Floor, Brass 2 Building</p>
-                    <p>Near Sharaf Dg Metro Station (Exit No: 3), Bur Dubai, Dubai, UAE</p>
-                    <p>Monday - Saturday (9am - 7pm)</p>
-                    <p>Sunday (10am - 2pm)</p>
-                    <p><strong>Phone:</strong> 042682901</p>
-                    <br>
-                    <p><strong>Important Note:</strong></p>
-                    <p>Those who have already registered in our consultancy, kindly send your resume with the Job Position Name & our Register Number in the subject of the Email. After that, please note when you are sending the resume make sure that it should be STRICTLY matching the REQUIREMENTS, DUTIES & RESPONSIBILITIES that we mentioned above & it should be mentioned in the resume also. If it is not matching our requirements, your resume will not be considered.</p>
-                    <br>
-                    <p><strong>For more details visit:</strong></p>
-                    <p><a href="http://www.best4uhr.com" target="_blank">http://www.best4uhr.com</a></p>
-                    <br>
-                    <p><strong>Best Wishes …</strong></p>
-                    <p><strong>Best For You Team.</strong></p>
-                    <br>
-                    <p><em>Right Job In The Right Time In Right Hand</em></p>
-                    <p><em>Best for You Hiring</em></p>
-                </div>
             </div>
 <div class="modal-footer">
        <button type="button" class="site-button" onclick="copyJobDetails({{ $job->id }})">Copy Details</button>

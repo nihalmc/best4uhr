@@ -49,48 +49,49 @@ public function index(Request $request)
 
 
 
-public function show($jobId){
-
+public function show($jobId)
+{
     // Retrieve the job by its ID
-        $job = Jobs::find($jobId);
+    $job = Jobs::find($jobId);
 
-        if (!$job) {
-            // Handle the case where the job is not found
-            return redirect()->route('candidate.jobs.index')->with('error', 'Job not found.');
-        }
+    if (!$job) {
+        // Handle the case where the job is not found
+        return redirect()->route('candidate.jobs.index')->with('error', 'Job not found.');
+    }
 
-        // Get the currently authenticated candidate
-        $candidate = auth('candidate')->user();
-        // Check if the candidate is authenticated
-        if (!$candidate) {
-            // Candidate is not authenticated, handle accordingly
-            return redirect()->route('home')->with('error', 'Please log in to access this page.');
-        }
-        // Check if the candidate has a name and email
-        $candidateName = $candidate->name ?? 'Candidate Name Not Available';
-        $candidateEmail = $candidate->contact_email ?? 'Candidate Email Not Available';
+    // Decode the 'nationality' field to get the selected nationalities for this job
+    $selectedNationalities = json_decode($job->nationality);
 
-        // Check if the candidate has a resume
-        $resumePath = optional($candidate->candidateDetail)->resume;
+    // Check if the candidate is authenticated and has the necessary information
+    $candidate = auth('candidate')->user();
+    if (!$candidate) {
+        // Candidate is not authenticated, handle accordingly
+        return redirect()->route('home')->with('error', 'Please log in to access this page.');
+    }
 
-        // Check if the candidate has already applied for this job
-        $existingApplication = JobApplication::where('job_id', $jobId)
-            ->where('candidate_id', $candidate->id)
-            ->first();
+    $candidateName = $candidate->name ?? 'Candidate Name Not Available';
+    $candidateEmail = $candidate->contact_email ?? 'Candidate Email Not Available';
 
-        if ($existingApplication) {
-            // Candidate has already applied for this job, show an error message
-            return redirect()->route('candidate.jobs.index')->with('error', 'You have already applied for this job.');
-        }
+    $resumePath = optional($candidate->candidateDetail)->resume;
 
-     return view('candidate.job-detail', compact('job', 'candidateName', 'candidateEmail', 'resumePath'));
+    $existingApplication = JobApplication::where('job_id', $jobId)
+        ->where('candidate_id', $candidate->id)
+        ->first();
 
+    if ($existingApplication) {
+        // Candidate has already applied for this job, show an error message
+        return redirect()->route('candidate.jobs.index')->with('error', 'You have already applied for this job.');
+    }
+
+    return view('candidate.job-detail', compact('job', 'candidateName', 'candidateEmail', 'resumePath', 'selectedNationalities'));
 }
+
 
 
 
     public function create($jobId)
     {
+
         // Retrieve the job by its ID
         $job = Jobs::find($jobId);
 
@@ -126,6 +127,7 @@ public function show($jobId){
         // You can pass other relevant data to the view if needed
         return view('candidate.jobs.apply', compact('job', 'candidateName', 'candidateEmail', 'resumePath'));
     }
+
 public function store(Request $request, $jobId)
 {
     // Validate the form data
@@ -191,6 +193,10 @@ public function store(Request $request, $jobId)
     // Get the currently authenticated candidate
     $candidate = Auth::guard('candidate')->user();
 
+    if (!$candidate) {
+        // Candidate is not authenticated, handle accordingly
+        return redirect()->route('home')->with('error', 'Please log in to access this page.');
+    }
     // Fetch applied jobs for the candidate and order them by applied_at in descending order
     $appliedJobs = JobApplication::where('candidate_id', $candidate->id)
         ->with(['job' => function ($query) {

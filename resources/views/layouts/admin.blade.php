@@ -9,6 +9,7 @@
     <meta name="robots" content="">
     <meta name="description" content="">
 
+
     <!-- FAVICONS ICON -->
     <link rel="icon" href="{{ asset('images/favicon.ico') }}" type="image/x-icon">
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('images/favicon.png') }}">
@@ -45,6 +46,7 @@
     <link rel="stylesheet" class="skin" type="text/css" href="{{ asset('css/skins-type/skin-6.css') }}">
     <!-- SIDE SWITCHER STYLE SHEET -->
     <link rel="stylesheet" type="text/css" href="{{ asset('css/switcher.css') }}">
+
 </head>
 <body>
     <!-- LOADING AREA START ===== -->
@@ -85,33 +87,6 @@
                     <!-- Right Side Content -->
                     <div class="header-right">
                         <ul class="header-widget-wrap">
-<!--Notification-->
-<li class="header-widget dashboard-noti-dropdown">
-    <div class="dropdown">
-        <a href="javascript:;" class="dropdown-toggle jobzilla-admin-notification" id="ID-NOTI_dropdown" data-bs-toggle="dropdown">
-            <i class="far fa-bell"></i>
-            <span class="notification-count">0</span><!-- Notification count -->
-        </a>
-        <div class="dropdown-menu" aria-labelledby="ID-NOTI_dropdown">
-            <div class="dashboard-widgets-header">Notifications</div>
-            <div class="noti-list dashboard-widget-scroll">
-                <ul id="notification-list">
-                    <!-- Notification items will be added here dynamically -->
-                </ul>
-                <div class="noti-view-all">
-                    <a href="javascript:;">View All</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</li>
-
-
-
-
-
-
-
                             <!--Account-->
                             <li class="header-widget">
 								<div class="dashboard-user-section">
@@ -126,7 +101,7 @@
 
                                                 <ul>
                                                     <li><a href="{{ route('admin.index') }}"><i class="fa fa-home"></i>Dashboard</a></li>
-                                                    <li><a href="{{ route('admin.logout') }}"><i class="fa fa-share-square"></i> Logout</a></li>
+                                                    <li><a href="javascript:;" data-bs-toggle="modal" data-bs-target="#logout-dash-profile"><i class="fa fa-share-square"></i> Logout</a></li>
                                                 </ul>
 
 
@@ -184,11 +159,10 @@
                         <a href="{{ route('change.password.form') }}"><i class="fa fa-fingerprint"></i><span class="admin-nav-text">Change Password</span></a>
                     </li>
 
-
-
                     <li>
                         <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#logout-dash-profile"><i class="fa fa-share-square"></i><span class="admin-nav-text">Logout</span></a>
                     </li>
+
 
                 </ul>
             </div>
@@ -200,25 +174,28 @@
 
 
 
-        <!--Logout Profile Popup-->
-        <div class="modal fade twm-model-popup" id="logout-dash-profile" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <h4 class="modal-title">Do you want to Logout your profile?</h4>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="site-button" data-bs-dismiss="modal">No</button>
-                    <button type="button"  class="site-button outline-primary"><a href="{{ route('admin.logout') }}">Yes</a></button>
-                </div>
+       <!-- Logout Profile Popup -->
+<div class="modal fade twm-model-popup" id="logout-dash-profile" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            <div class="modal-body">
+                <h4 class="modal-title">Do you want to Logout your profile?</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="site-button" data-bs-dismiss="modal">No</button>
+                 <form method="POST"  action="{{ route('admin.logout') }}">
+                             @csrf
+                    <button type="submit" class="site-button outline-primary" data-bs-dismiss="modal">Yes</button>
+                </form>
             </div>
         </div>
-
     </div>
+</div>
+
+
 
 <script>
     @if (session('success'))
@@ -255,52 +232,7 @@
     <script src="{{ asset('js/swiper-bundle.min.js') }}"></script><!-- Swiper JS -->
     <script src="{{ asset('js/custom.js') }}"></script><!-- CUSTOM FUCTIONS  -->
     <script src="{{ asset('js/switcher.js') }}"></script><!-- SHORTCODE FUCTIONS  -->
-
-    <script>
-    // Function to fetch messages and update the notification dropdown
-    function fetchMessages() {
-        // Simulate an AJAX request (replace with your actual API endpoint)
-        setTimeout(function () {
-            const response = {
-                notificationCount: 5, // Replace with actual notification count
-                messages: [
-                    // Replace with actual message data
-                    { sender: 'John Doe', text: 'Hello, how are you?', link: '#' },
-                    { sender: 'Alice Smith', text: 'Meeting at 2 PM today.', link: '#' },
-                    { sender: 'Bob Johnson', text: 'Don't forget to submit the report.', link: '#' },
-                    { sender: 'Eve Wilson', text: 'You have a new message.', link: '#' },
-                    { sender: 'Charlie Brown', text: 'Check out this article.', link: '#' },
-                ],
-            };
-
-            // Update the notification count
-            const notificationCountElement = document.querySelector('.notification-count');
-            notificationCountElement.textContent = response.notificationCount;
-
-            // Update the notification list
-            const notificationList = document.getElementById('notification-list');
-            notificationList.innerHTML = ''; // Clear existing notifications
-
-            response.messages.forEach((message) => {
-                const listItem = document.createElement('li');
-                listItem.innerHTML = `
-                    <a href="${message.link}">
-                        <span class="noti-icon"><i class="far fa-bell"></i></span>
-                        <span class="noti-texting">
-                            <b>${message.sender}:</b> ${message.text}
-                        </span>
-                    </a>
-                `;
-                notificationList.appendChild(listItem);
-            });
-        }, 1000); // Simulated delay for demonstration
-    }
-
-    // Call the fetchMessages function when the page loads
-    document.addEventListener('DOMContentLoaded', fetchMessages);
-</script>
-
-
+     <script src="{{ asset('js/custom-logout.js') }}"></script>
 
 </body>
 </html>

@@ -24,9 +24,9 @@
                             <div class="row">
                                     <div class="col-lg-6 col-md-6">
                                         <div class="form-group">
-                                            <label>company name And Address</label>
+                                            <label>company name </label>
                                             <div class="ls-inputicon-box">
-                                                <input class="form-control wt-form-control"  name="company_name" id="company_name" type="text" placeholder="">
+                                                <input class="form-control wt-form-control"  name="company_name" id="company_name" type="text" placeholder="company name">
                                                 <i class="fs-input-icon fas fa-building"></i>
                                                 @error('company_name')
                 <span class="text-danger">{{ $message }}</span>
@@ -38,7 +38,7 @@
                                         <div class="form-group">
                                             <label>Contact Person Name</label>
                                             <div class="ls-inputicon-box">
-                                                <input class="form-control wt-form-control"  name="contact_person" id="contact_person" type="text" placeholder="">
+                                                <input class="form-control wt-form-control"  name="contact_person" id="contact_person" type="text" placeholder="Contact Person Name">
                                                 <i class="fs-input-icon fas fa-user-tie "></i>
                                                 @error('contact_person')
                 <span class="text-danger">{{ $message }}</span>
@@ -46,11 +46,21 @@
                                             </div>
                                         </div>
                                     </div>
+      <div class="col-lg-6 col-md-6">
+    <div class="form-group">
+        <label>Company Address</label>
+        <div class="ls-inputicon-box">
+            <input class="form-control wt-form-control" name="address" id="address" type="text" placeholder="Company Address">
+            <i class="fs-input-icon fas fa-map-marker"></i>
+        </div>
+    </div>
+</div>
+
                                     <div class="col-lg-6 col-md-6">
                                         <div class="form-group">
                                             <label>Employer Email</label>
                                             <div class="ls-inputicon-box">
-                                                <input class="form-control wt-form-control" name="contact_email" id="contact_email"  type="email" placeholder="">
+                                                <input class="form-control wt-form-control" name="contact_email" id="contact_email"  type="email" placeholder="Employer Email">
                                                 <i class="fs-input-icon fas fa-at"></i>
                                                  @error('contact_email')
                 <span class="text-danger">{{ $message }}</span>
@@ -58,12 +68,13 @@
                                             </div>
                                         </div>
                                     </div>
+
 <div class="col-lg-6 col-md-6">
     <div class="form-group">
         <label>Employer Mobile</label>
         <div class="ls-inputicon-box">
-            <input class="form-control wt-form-control" id="mobile" name="mobile" type="tel" placeholder="Mobile Number" />
-
+            <input class="form-control wt-form-control"  name="mobile" type="text" placeholder="Mobile Number" />
+<i class="fs-input-icon fas fa-phone-alt"></i>
             @error('mobile')
                 <span class="text-danger">{{ $message }}</span>
             @enderror
@@ -75,7 +86,7 @@
                                         <div class="form-group">
                                             <label>Username</label>
                                             <div class="ls-inputicon-box">
-                                                <input class="form-control wt-form-control" name="username" id="username" type="text" placeholder="">
+                                                <input class="form-control wt-form-control" name="username" id="username" type="text" placeholder="Username">
                                                 <i class="fs-input-icon fas fa-user-tie"></i>
                                                 @error('username')
                     <span class="text-danger">{{ $message }}</span>
@@ -87,7 +98,7 @@
                                         <div class="form-group">
                                             <label>Password</label>
                                             <div class="ls-inputicon-box">
-                                                <input class="form-control wt-form-control"  name="password" id="password" type="password" placeholder="">
+                                                <input class="form-control wt-form-control"  name="password" id="password" type="password" placeholder="Password">
                                                  <span class="password-toggle" onclick="togglePassword('password', 'old_toggle')">
                                             <i id="old_toggle" class="fas fa-eye passi2"></i>
                                         </span>

@@ -48,6 +48,15 @@
         </div>
     </div>
 </div>
+<div class="col-lg-6 col-md-6">
+    <div class="form-group">
+        <label>Company Address</label>
+        <div class="ls-inputicon-box">
+            <input class="form-control wt-form-control" name="address" id="address" type="text" placeholder="Company Address" value="{{ $employers->address }}">
+            <i class="fs-input-icon fas fa-map-marker"></i>
+        </div>
+    </div>
+</div>
 
 
 
@@ -55,7 +64,7 @@
     <div class="form-group">
         <label>Employer Email</label>
         <div class="ls-inputicon-box">
-            <input class="form-control wt-form-control" name="contact_email" id="contact_email" type="email" placeholder="" value="{{ $employers->contact_email }}">
+            <input class="form-control wt-form-control" name="contact_email" id="contact_email" type="email" placeholder="" value="{{ $employers->contact_email }}" >
             <i class="fs-input-icon fas fa-at"></i>
             @error('contact_email')
             <span class="text-danger">{{ $message }}</span>
@@ -63,12 +72,16 @@
         </div>
     </div>
 </div>
+
+
+
+
 <div class="col-lg-6 col-md-6">
                               <div class="form-group">
     <label>Employer Mobile</label>
     <div class="ls-inputicon-box">
-       <input class="form-control wt-form-control" id="mobile" name="mobile" type="tel" value="{{ $employers->mobile }}" />
-
+       <input class="form-control wt-form-control"  name="mobile" type="text" value="{{ $employers->mobile }}" />
+<i class="fs-input-icon fas fa-phone-alt"></i>
         <!-- Replace "US" with the ISO 3166-1 alpha-2 country code of your desired default country. -->
         @error('mobile')
             <span class="text-danger">{{ $message }}</span>

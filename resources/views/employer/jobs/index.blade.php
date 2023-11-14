@@ -57,7 +57,15 @@
 
                                         <td>{{ $job->field_of_work }}</td>
                                         <td>{{ $job->salary }}</td>
-                                        <td>{{ $job->nationality }}</td>
+                                        <td>@if (!is_null($job->selectedNationalities) && count($job->selectedNationalities) > 0)
+                <ul>
+                    @foreach ($job->selectedNationalities as $nationality)
+                        <li style="list-style:none">{{ $nationality }},</li>
+                    @endforeach
+                </ul>
+            @else
+                No selected nationalities
+            @endif</td>
                                         <td>{{ $job->gender }}</td>
                                       <td>@if ($job->employer)
                     {{ $job->employer->company_name }}

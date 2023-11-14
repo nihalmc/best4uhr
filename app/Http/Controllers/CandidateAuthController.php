@@ -72,14 +72,17 @@ class CandidateAuthController extends Controller
 
   public function register(Request $request)
 {
-    // Validate the form data
+    // Validate the form data with custom messages
     $request->validate([
         'name' => 'required|string|max:255',
         'contact_email' => 'required|email|unique:candidates,contact_email',
         'mobile' => 'nullable|string',
         'username' => 'required|string|unique:candidates,username',
         'password' => 'required|min:8',
-        'registration_number' => 'required|string',
+        'registration_number' => 'required|string|unique:candidates,registration_number',
+    ], [
+        'registration_number.unique' => 'The registration number has already been taken.',
+        'password.required' => 'The password field is required.', // You can add custom messages for other rules
     ]);
 
     // Create a new candidate with the default 'pending' status
@@ -90,7 +93,7 @@ class CandidateAuthController extends Controller
         'username' => $request->username,
         'registration_number' => $request->registration_number,
         'password' => Hash::make($request->password),
-        'status' => 'pending', // Set the status to 'pending'
+        'status' => 'pending',
     ]);
 
     $candidate->save();
@@ -99,6 +102,7 @@ class CandidateAuthController extends Controller
 
     return redirect()->route('home')->with('success', 'Candidate created successfully. You are pending approval.');
 }
+
 
 
     public function showChangePasswordForm()

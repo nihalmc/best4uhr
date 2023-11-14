@@ -10,8 +10,13 @@ use App\Models\JobApplication;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Carbon;
 class AuthController extends Controller
 {
+
+
     public function index()
     {
 
@@ -25,7 +30,7 @@ class AuthController extends Controller
     }
     public function showLoginForm()
     {
-        return view('admin.login'); // Create a login form view for admin (admin.login).
+        return view('admin.login');
     }
     public function adminLogin(Request $request)
     {
@@ -48,13 +53,20 @@ class AuthController extends Controller
         return redirect()->route('admin.login')->with('error', 'Invalid credentials');
 
     }
-   // logout
-   public function adminLogout()
-   {
 
-    Auth::logout();
-    return redirect()->route('admin.login')->with('success', 'Logged out successfully');
+public function adminLogout(Request $request)
+{
+     Auth::logout();
+
+    Auth::guard('user')->logout();
+ Auth::guard('candidate')->logout();
+
+ $request->session()->invalidate();
+    $request->session()->regenerateToken();
+
+    return redirect('/admin');
 }
+
 
 
    public function showChangePasswordForm()

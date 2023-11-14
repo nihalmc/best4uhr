@@ -12,6 +12,7 @@
                     <div class="breadcrumbs"><a href="#">Home</a><a href="#">Dashboard</a><span>Job Seekers</span></div>
                 </div>
 <a href="{{ route('candidates.create') }}" class="btn text-white site-bg-black mb-3">Add Job Seeker</a>
+ <a href="{{ route('jobseekers.downloadAllFiles') }}" class="btn text-white site-bg-primary mb-3">Download All Job Seeker Files</a>
                 <div class="twm-pro-view-chart-wrap">
 
                     <div class="col-lg-12 col-md-12 mb-4">
@@ -23,7 +24,7 @@
 
                             <div class="panel-body wt-panel-body">
                                 <div class="twm-D_table p-a20 table-responsive">
-                                    <table id="candidate_data_table" class="table table-bordered">
+                                    <table id="candidate_data_table" class="table table-bordered ">
                                         <thead>
                                             <tr>
 
@@ -93,6 +94,7 @@
     </td>
 </tr>
 @endforeach
+ </tbody>
 
                                     </table>
                                 </div>

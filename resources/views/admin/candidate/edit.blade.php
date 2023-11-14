@@ -64,7 +64,7 @@
                                     <label>Job Seeker Registration Number</label>
                                     <div class="ls-inputicon-box">
                                         <input class="form-control wt-form-control" name="registration_number" type="text" value="{{ old('registration_number', $candidates->registration_number) }}" placeholder="Registration Number">
-                                        <i class="fs-input-icon fas fa-phone-alt"></i>
+                                        <i class="fs-input-icon fas fa-id-card"></i>
                                         @error('registration_number')
                                         <span class="text-danger">{{ $message }}</span>
                                         @enderror

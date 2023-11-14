@@ -30,7 +30,7 @@
                                                  <th>Email</th>
                                                  <th>Mobile</th>
                                                  <th>Job position</th>
-                                                 <th>Experience Regions</th>
+                                                 <th>Experience  and year of experience</th>
                                                <th>Resume</th>
                                                 <th>Action</th>
                                             </tr>

@@ -20,7 +20,7 @@
 
                             <div>
                                 <ul class="wt-breadcrumb breadcrumb-style-2">
-                                    <li><a href="{{ route('candidate.index') }}">Home</a></li>
+                                    <li><a href="{{ route('home') }}">Home</a></li>
                                     <li>Job Detail</li>
                                 </ul>
                             </div>
@@ -39,7 +39,7 @@
 
 
             <!-- OUR BLOG START -->
-            <div class="section-full  p-t60 p-b20 bg-white">
+            <div class="section-full  p-t20 p-b20 bg-white">
                 <div class="container">
 
                     <!-- BLOG SECTION START -->
@@ -52,21 +52,27 @@
                                     <div class="twm-job-self-wrap">
                                         <div class="twm-job-self-info">
                                             <div class="twm-job-self-top">
-                                                <div class="twm-media-bg">
-                                                    <img src="{{ asset('images/job-detail-bg.jpg') }}" alt="#">
-
-                                                </div>
-
-
                                                 <div class="twm-mid-content">
+<h3 class="mb-3">Job Information:-</h3>
+                       <h5 >Job Code:{{ $job->job_code }}</h5>
+                        <h5 >Field of Work:{{ $job->field_of_work }}</h5>
+                         <h5>Location:{{ $job->location }}</h5>
+                         <h5>Offered Salary:{{ $job->salary }}/Month</h5>
+                         <h5>Nationalities:@if ($selectedNationalities)
+    @foreach ($selectedNationalities as $selectedNationality)
+        {{ $selectedNationality }},
+    @endforeach
+@else
+    No selected nationalities for this job.
+@endif
+</h5>
+                         <h5>Gender:{{ $job->gender }}</h5>
 
 
 
-
-                                                    <h4 class="twm-job-title">{{ $job->field_of_work }}<span class="twm-job-post-duration"> /{{ date('d/m/Y', strtotime($job->posted_date)) }}</span></h4>
-                                                    <p class="twm-job-address"><i class="feather-map-pin"></i>{{ $job->location }}</p>
                                                     <div class="twm-job-self-mid">
                                                         <div class="twm-job-self-mid-left">
+
                                                              <!--<div class="form-group mb-4">
                                             <h4 class="section-head-small mb-4">Location</h4>
                                             <div class="input-group">
@@ -74,18 +80,12 @@
                                                 <button class="btn" type="button"><i class="feather-map-pin"></i></button>
                                             </div>
                                         </div>-->
-                                                            <div class="twm-jobs-amount">{{ $job->salary }} <span>/ Month</span></div>
+
                                                         </div>
-                                                        <div class="twm-job-apllication-area">Application ends:
-                                                            <span class="twm-job-apllication-date">{{ date('d/m/Y', strtotime($job->closing_date)) }}<span>
-                                                        </div>
+
                                                     </div>
 
-                                                    <div class="twm-job-self-bottom">
-                                                        <a class="site-button" data-bs-toggle="modal" href="#apply_job_popup" role="button">
-                                                            Apply Now
-                                                        </a>
-                                                    </div>
+
                                                 </div>
                                             </div>
 
@@ -95,7 +95,7 @@
                                     </div>
 
 
-                                    <h4 class="twm-s-title">Requirments:</h4>
+                                    <h4 >Requirements:</h4>
                                     <ul class="description-list-2">
 
 
@@ -107,13 +107,14 @@
 
 
                                     </ul>
-
+<h5>Posted Date:<span style="color:#00cc00"> {{ date('d/m/Y', strtotime($job->posted_date)) }}</span></h5>
+ <h5 class="twm-job-apllication-area">Closing Date:<span style="color:#d81f34"> {{ date('d/m/Y', strtotime($job->closing_date)) }}</span></h5>
 
                                     <h4 class="twm-s-title">Important Note:</h4>
                                     <ul class="description-list-2">
                                         <li>
                                             <i class="feather-check"></i>
-                                            Those who have already registered in our consultancy, kindly send your resume with the Job Position Name & our Register Number in the subject of the Email.
+                                           Those who have already registered in our consultancy, kindly send your resume with the  Job Code,Job Position Name & our Register Number in the subject of the Email.
 
                                         </li>
                                         <li>
@@ -127,77 +128,27 @@
 
 
                                     </ul>
-
+                                    <div class=" twm-job-self-wrap text-center">
+                                    <div class=" twm-job-self-info">
+ <div class="twm-job-self-bottom">
+                                                        <a class="site-button" href="#apply_job_popup" data-bs-toggle="modal" role="button">
+                                                            Apply Now
+                                                        </a>
+                                                    </div>
+                                               </div>
+                                               </div>
                                 </div>
                             </div>
 
                             <div class="col-lg-4 col-md-12 rightSidebar">
 
-                                <div class="side-bar mb-4">
-                                    <div class="twm-s-info2-wrap mb-5">
-                                        <div class="twm-s-info2">
-                                            <h4 class="section-head-small mb-4">Job Information</h4>
 
-                                            <ul class="twm-job-hilites2">
-
-                                                <li>
-                                                    <div class="twm-s-info-inner">
-                                                        <i class="fas fa-calendar-alt"></i>
-                                                        <span class="twm-title">Date Posted</span>
-                                                        <div class="twm-s-info-discription">{{ $job->posted_date }}</div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="twm-s-info-inner">
-                                                        <i class="fas fa-map-marker-alt"></i>
-                                                        <span class="twm-title">Location</span>
-                                                        <div class="twm-s-info-discription">{{ $job->location }}</div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="twm-s-info-inner">
-                                                        <i class="fas fa-user-tie"></i>
-                                                        <span class="twm-title">Field of Work</span>
-                                                        <div class="twm-s-info-discription">{{ $job->field_of_work }}</div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="twm-s-info-inner">
-                                                        <i class="fas fa-venus-mars"></i>
-                                                        <span class="twm-title">Gender</span>
-                                                        <div class="twm-s-info-discription">{{ $job->gender }}</div>
-                                                    </div>
-                                                </li>
-                                                  <li>
-                                                    <div class="twm-s-info-inner">
-
-                                                        <i class="fas fa-user"></i>
-                                                        <span class="twm-title">Job Code</span>
-                                                        <div class="twm-s-info-discription">{{ $job->job_code }}</div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="twm-s-info-inner">
-
-                                                        <i class="fas fa-money-bill-wave"></i>
-                                                        <span class="twm-title">Offered Salary</span>
-                                                        <div class="twm-s-info-discription">{{ $job->salary }} / Month</div>
-                                                    </div>
-                                                </li>
-
-                                            </ul>
-
-                                        </div>
-                                    </div>
-
-
-                                </div>
 
                                 <div class="twm-s-info3-wrap mb-5">
                                     <div class="twm-s-info3">
                                         <div class="twm-s-info-logo-section">
 
-                                            <h4 class="twm-title">{{ $job->job_position }}</h4>
+                                            <h4 class="twm-title">Best For You HR Consultancy</h4>
                                         </div>
                                         <ul>
 
@@ -206,28 +157,28 @@
                                                 <div class="twm-s-info-inner">
                                                     <i class="fas fa-mobile-alt"></i>
                                                     <span class="twm-title">Phone</span>
-                                                    <div class="twm-s-info-discription">+971 54 586 5418</div>
+                                                    <div class="twm-s-info-discription"><a href="tel:+971545865418" target="_blank">+971 54 586 5418</a></div>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="twm-s-info-inner">
                                                     <i class="fas fa-at"></i>
                                                     <span class="twm-title">Email</span>
-                                                    <div class="twm-s-info-discription">best4uhr@gmail.com</div>
+                                                    <div class="twm-s-info-discription" ><a href="mailto:info@best4uhr.com" target="_blank">best4uhr@gmail.com</a></div>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="twm-s-info-inner">
                                                     <i class="fas fa-desktop"></i>
                                                     <span class="twm-title">Website</span>
-                                                    <div class="twm-s-info-discription">http://best4uhr.com/</div>
+                                                    <div class="twm-s-info-discription"><a href="http://www.best4uhr.com/" target="_blank">http://best4uhr.com/</a></div>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="twm-s-info-inner">
                                                     <i class="fas fa-map-marker-alt"></i>
                                                     <span class="twm-title">Address</span>
-                                                    <div class="twm-s-info-discription">Office No: 203, 2nd Floor, Brass II Building, Near Sharaf DG Metro Station (Exit No:3), Burdubai, Dubai, UAE</div>
+                                                    <div class="twm-s-info-discription">Office No: 203, 2nd Floor, Brass II Building, Near Sharaf DG Metro Station (Exit No:3), Bur Dubai, Dubai, UAE</div>
                                                 </div>
                                             </li>
 
@@ -321,9 +272,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
-
-
 
 
                                                 <div class="col-xl-12 col-lg-12 col-md-12">

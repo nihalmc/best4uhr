@@ -176,6 +176,8 @@
 
         @yield('content')
 
+        @yield('errors')
+
    <!-- FOOTER START -->
         <footer class="footer-dark" style="background-image: url(images/f-bg.jpg);">
             <div class="container">
@@ -329,26 +331,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-lg-12">
-                                                <div class="form-group mb-3">
-                                                    <input name="username" type="text" required="" class="form-control" placeholder="Usearname*">
-                                                     @error('username')
-                <span class="text-danger">{{ $message }}</span>
-                @enderror
-                                                </div>
-                                            </div>
 
-                                            <div class="col-lg-12">
-                                                <div class="form-group mb-3">
-                                                    <input name="password" id="password-toggle-candidate" type="password" class="form-control" required="" placeholder="Password*">
-<span class="password-toggle" id="password-toggle-btn-candidate" onclick="togglePasswordVisibility('candidate')">
-    <i id="eye-icon-candidate" class="fa fa-eye passi3"></i>
-</span>
-                                                      @error('password')
-                <span class="text-danger">{{ $message }}</span>
-                @enderror
-                                                </div>
-                                            </div>
 
                                             <div class="col-lg-12">
                                                 <div class="form-group mb-3">
@@ -376,6 +359,26 @@
                 @enderror
                                                 </div>
                                             </div>
+                                            <div class="col-lg-12">
+                                                <div class="form-group mb-3">
+                                                    <input name="username" type="text" required="" class="form-control" placeholder="Username*">
+                                                     @error('username')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-12">
+                                                <div class="form-group mb-3">
+                                                    <input name="password" id="password-toggle-candidate" type="password" class="form-control" required="" placeholder="Password*">
+<span class="password-toggle" id="password-toggle-btn-candidate" onclick="togglePasswordVisibility('candidate')">
+    <i id="eye-icon-candidate" class="fa fa-eye passi3"></i>
+</span>
+                                                      @error('password')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
+                                                </div>
+                                            </div>
 
                                             <div class="col-lg-12">
                                                 <div class="form-group mb-3">
@@ -397,11 +400,11 @@
                                     <!--Signup Employer Content-->
                                     <div class="tab-pane fade show active" id="sign-Employer">
                                         <div class="row">
-                          <form method="POST" action="{{ route('employer.register.submit') }}">
+                          <form id="employerRegistrationForm" method="POST" action="{{ route('employer.register.submit') }}">
                             @csrf
-                            <div class="col-lg-12">
+                                        <div class="col-lg-12">
                                                 <div class="form-group mb-3">
-                                                    <input name="company_name" id="company_name" type="text" required="" class="form-control" placeholder="company name And Address*">
+                                                    <input name="company_name" id="company_name" type="text" required="" class="form-control" placeholder="company name*">
                                                     @error('company_name')
                     <span class="text-danger">{{ $message }}</span>
                     @enderror
@@ -409,24 +412,22 @@
                                             </div>
                                             <div class="col-lg-12">
                                                 <div class="form-group mb-3">
-                                                    <input name="username" type="text" required="" class="form-control" placeholder="Usearname*">
-                                                    @error('username')
+                                                    <input name="contact_person" id="contact_person" type="text" required="" class="form-control" placeholder="Contact Person Name*">
+                                                    @error('contact_person')
+                    <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                                                </div>
+                                            </div>
+<div class="col-lg-12">
+                                                <div class="form-group mb-3">
+                                                    <input name="address" id="address" type="text" required="" class="form-control" placeholder="Company Address*">
+                                                    @error('address')
                     <span class="text-danger">{{ $message }}</span>
                     @enderror
                                                 </div>
                                             </div>
 
-                                            <div class="col-lg-12">
-                                                <div class="form-group mb-3">
-                                                    <input name="password" type="password" id="password-toggle-employer" class="form-control" required="" placeholder="Password*">
- <span class="password-toggle" id="password-toggle-btn-employer" onclick="togglePasswordVisibility('employer')">
-    <i id="eye-icon-employer" class="fa fa-eye passi3"></i>
-</span>
-                                                    @error('password')
-                <span class="text-danger">{{ $message }}</span>
-                @enderror
-                                                </div>
-                                            </div>
+
 
                                             <div class="col-lg-12">
                                                 <div class="form-group mb-3">
@@ -443,6 +444,26 @@
 
 
                                                     @error('mobile')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
+                                                </div>
+                                            </div>
+  <div class="col-lg-12">
+                                                <div class="form-group mb-3">
+                                                    <input name="username" type="text" required="" class="form-control" placeholder="Username*">
+                                                    @error('username')
+                    <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-12">
+                                                <div class="form-group mb-3">
+                                                    <input name="password" type="password" id="password-toggle-employer" class="form-control" required="" placeholder="Password*">
+ <span class="password-toggle" id="password-toggle-btn-employer" onclick="togglePasswordVisibility('employer')">
+    <i id="eye-icon-employer" class="fa fa-eye passi0"></i>
+</span>
+                                                    @error('password')
                 <span class="text-danger">{{ $message }}</span>
                 @enderror
                                                 </div>
@@ -509,7 +530,7 @@
                                         <div class="tab-pane fade show active" id="login-candidate">
                                             <div class="row">
 
-                                             <form method="POST" action="{{ route('candidate.loginsubmit') }}">
+                                             <form  method="POST" action="{{ route('candidate.loginsubmit') }}">
     @csrf
 
     <div class="col-lg-12">
@@ -563,12 +584,12 @@
                                         <!--Login Employer Content-->
                                         <div class="tab-pane fade " id="login-Employer">
                                             <div class="row">
-                                                 <form method="POST" action="{{ route('employer.loginsubmit') }}">
+                                                 <form  method="POST" action="{{ route('employer.loginsubmit') }}">
                                             @csrf
 
                                                 <div class="col-lg-12">
                                                     <div class="form-group mb-3">
-                                                        <input name="username" type="text" required="" class="form-control" placeholder="Usearname*">
+                                                        <input name="username" type="text" required="" class="form-control" placeholder="Username*">
                                                         @error('username')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -823,6 +844,10 @@
         // Display an error alert
         alert("{{ session('error') }}");
     @endif
+
+    @if($errors->any())
+        alert("{{ implode('\n', $errors->all()) }}");
+    @endif
 </script>
 <script>
     // Get the radio buttons and select element
@@ -846,6 +871,34 @@
     // Initially hide the select when the page loads if "No Experience" is checked
     if (document.querySelector('input[name="experience_region"]:checked').value === 'no') {
         experienceYearsSelect.style.display = 'none';
+    }
+</script>
+
+<script>
+    function validateAndSubmit() {
+        // Clear previous validation errors
+        $('#validationErrors').html('');
+
+        // Perform AJAX request for validation
+        $.ajax({
+            url: "{{ route('employer.register.submit') }}",
+            type: "POST",
+            data: $('#employerRegistrationForm').serialize(),
+            success: function (response) {
+                if (response.success) {
+                    // If validation succeeds, submit the form
+                    $('#employerRegistrationForm').submit();
+                } else {
+                    // If validation fails, display errors in alert messages
+                    $.each(response.errors, function (key, value) {
+                        alert(value); // Display validation error in an alert
+                    });
+                }
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
     }
 </script>
 

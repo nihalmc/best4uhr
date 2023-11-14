@@ -8,11 +8,20 @@ use App\Models\Employers;
 use App\Models\JobApplication;
 use Illuminate\Support\Facades\Auth;
 use App\JobStatus;
+use Illuminate\Support\Facades\DB;
+use App\Models\Nationality;
 
 class JobController extends Controller
 {
     public function indexd()
     {
+        // Get the currently authenticated employer
+    $employer = auth('employer')->user();
+
+     if (!$employer) {
+        // If the employer is not authenticated, set a message and redirect
+        return redirect()->route('home')->with('error', 'Please login to access your job listings.');
+    }
         // Add logic to fetch and prepare data for the dashboard
 
         // Example: Fetch jobs, notifications, or other relevant data
@@ -25,13 +34,17 @@ class JobController extends Controller
        // Get the currently logged-in employer
        $employer = Auth::guard('employer')->user();
         if (!$employer) {
+
         // If the employer is not authenticated, set a message and redirect
         return redirect()->route('home')->with('error', 'Please login to access your job listings.');
     }
 
        // Fetch job listings associated with the employer
        $jobs = Jobs::where('employer_id', $employer->id)->get();
-
+// Iterate through the jobs and fetch the selected nationalities for each job
+    foreach ($jobs as $job) {
+        $job->selectedNationalities = $job ? json_decode($job->nationality) : [];
+    }
        // Return a view to display the job listings
        return view('employer.jobs.index', compact('jobs'));
 
@@ -39,8 +52,16 @@ class JobController extends Controller
 
     public function create()
     {
+        // Get the currently authenticated employer
+    $employer = auth('employer')->user();
+
+     if (!$employer) {
+        // If the employer is not authenticated, set a message and redirect
+        return redirect()->route('home')->with('error', 'Please login to access your job listings.');
+    }
+         $nationalities = Nationality::all(); // Assuming you have a Nationality model
         // Return a view to create a new job listing
-        return view('employer.jobs.create');
+        return view('employer.jobs.create',compact('nationalities'));
     }
 
     public function store(Request $request)
@@ -51,7 +72,7 @@ class JobController extends Controller
             'field_of_work' => 'required|string',
             'location' => 'required|string',
             'salary' => 'required|string',
-            'nationality' => 'required|string',
+            'nationality' => 'required|array',
             'gender' => 'required|string',
             'requirements' => 'required|string',
             'posted_date' => 'required|date',
@@ -63,7 +84,7 @@ class JobController extends Controller
 $jobs->field_of_work = $request->input('field_of_work');
 $jobs->location = $request->input('location');
 $jobs->salary = $request->input('salary');
-$jobs->nationality = $request->input('nationality');
+$jobs->nationality = json_encode($request->input('nationality'));
 $jobs->gender = $request->input('gender');
 $jobs->requirements = $request->input('requirements');
 $jobs->posted_date = $request->input('posted_date');
@@ -91,11 +112,19 @@ $jobs->status = JobStatus::PENDING;
 
     public function edit($id)
     {
+        // Get the currently authenticated employer
+    $employer = auth('employer')->user();
+
+     if (!$employer) {
+        // If the employer is not authenticated, set a message and redirect
+        return redirect()->route('home')->with('error', 'Please login to access your job listings.');
+    }
         // Find and display the form to edit the specified job listing
         $job = Jobs::findOrFail($id);
-
+        $nationalities = Nationality::all();
+        $selectedNationalities = $job ? json_decode($job->nationality) : [];
         // Return a view to edit the job listing
-        return view('employer.jobs.edit', compact('job'));
+        return view('employer.jobs.edit', compact('job','nationalities', 'selectedNationalities'));
     }
 
     public function update(Request $request, $id)
@@ -106,7 +135,7 @@ $jobs->status = JobStatus::PENDING;
             'field_of_work' => 'required|string',
             'location' => 'required|string',
             'salary' => 'required|string',
-            'nationality' => 'required|string',
+            'nationality' => 'required|array',
             'gender' => 'required|string',
             'requirements' => 'required|string',
             'posted_date' => 'required|date',

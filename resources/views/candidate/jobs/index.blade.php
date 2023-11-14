@@ -257,8 +257,9 @@
                        <option value="40" @if($searchQuery == '40') selected @endif>Show 40</option>
                         <option value="50" @if($searchQuery == '50') selected @endif>Show 50</option>
                                <option value="60" @if($searchQuery == '60') selected @endif>Show 60</option>
+                               <option value="" @if($searchQuery == '') selected @endif>Show </option>
                                 </select>
-                                 <button type="submit" class="btn site-bg-black site-text-white">Apply</button>
+                                 <button type="submit" class="btn site-bg-black site-text-white">Show</button>
                                 </form>
 
                             </div>

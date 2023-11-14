@@ -12,7 +12,7 @@ class CandidateAuthMiddleware
         // Check if the candidate is authenticated using the 'candidate' guard
         if (!Auth::guard('candidate')->check()) {
             // Candidate is not authenticated, you can handle this as needed
-            return redirect()->route('candidate.login'); // Redirect to the candidate login page
+            return redirect()->route('home')->with('error', 'Please login to access your pages.'); // Redirect to the candidate login page
         }
 
         // Candidate is authenticated, proceed with the request

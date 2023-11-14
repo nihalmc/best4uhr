@@ -7,50 +7,56 @@ use libphonenumber\NumberParseException;
 use libphonenumber\PhoneNumberFormat;
 use Illuminate\Http\Request;
 use App\Models\Employers;
+use App\Models\Nationality;
+use ZipArchive;
+use PDF;
 
 class EmployerController extends Controller
 {
+
     public function index()
 {
+
     $employers = Employers::orderBy('created_at', 'desc')->get(); // Fetch all employers from the database, ordered by 'created_at' in descending order
-    return view('admin.employers.index', ['employers' => $employers]);
+
+    return view('admin.employers.index', compact('employers'));
 }
 
 
     // Show the form for creating a new employer
     public function create()
     {
-        return view('admin.employers.create');
+         $nationalities = Nationality::all();
+        return view('admin.employers.create', compact('nationalities'));
     }
 
-   public function store(Request $request)
-    {
-        $request->validate([
-            'company_name' => 'required|string|max:255',
-            'contact_person' => 'required|string|max:255',
-            'contact_email' => 'required|email|unique:employers,contact_email',
-            'mobile' => 'required|string',
-            'username' => 'required|string|unique:employers,username',
-            'password' => 'required|min:6',
-        ]);
+public function store(Request $request)
+{
+    $request->validate([
+        'company_name' => 'required|string|max:255',
+        'contact_person' => 'required|string|max:255',
+        'address' => 'required|string|max:255',
+        'contact_email' => 'required|email|unique:employers,contact_email',
+        'mobile' => 'required|string',
+        'username' => 'required|string|unique:employers,username',
+        'password' => 'required|min:6',
+    ]);
 
-        $employers = new Employers();
-        $employers->company_name = $request->company_name;
-        $employers->contact_person = $request->contact_person;
-        $employers->contact_email = $request->contact_email;
+    $employers = new Employers();
+    $employers->company_name = $request->company_name;
+    $employers->contact_person = $request->contact_person;
+    $employers->contact_email = $request->contact_email;
+    $employers->address = $request->address;
+    $employers->mobile = $request->mobile;
+    $employers->username = $request->username;
+    $employers->isEmployer = true;
+    $employers->password = Hash::make($request->password);
 
-        // Format and store the mobile number with the country code
-        $mobileNumber = $this->formatMobileNumber($request->mobile);
-        $employers->mobile = $mobileNumber;
+    $employers->save();
 
-        $employers->username = $request->username;
-        $employers->isEmployer = true;
-        $employers->password = Hash::make($request->password);
+    return redirect()->route('employers.index')->with('success', 'Employer created successfully');
+}
 
-        $employers->save();
-
-        return redirect()->route('employers.index')->with('success', 'Employer created successfully');
-    }
 /**
  * Extract the country code and format the mobile number using intl-tel-input.
  */
@@ -59,41 +65,43 @@ class EmployerController extends Controller
     // Show the form for editing an employer
     public function edit($id)
     {
-        $employers = Employers::findOrFail($id); // Find the employer by ID
-        return view('admin.employers.edit', ['employers' => $employers]);
-    }
-
-   public function update(Request $request, $id)
-    {
-        $request->validate([
-            'company_name' => 'required|string|max:255',
-            'contact_person' => 'required|string|max:255',
-            'contact_email' => 'required|email|unique:employers,contact_email,' . $id,
-            'mobile' => 'required|string',
-            'username' => 'required|string|unique:employers,username,' . $id,
-            'password' => 'nullable|min:6',
-        ]);
 
         $employers = Employers::findOrFail($id);
-
-        $employers->company_name = $request->company_name;
-        $employers->contact_person = $request->contact_person;
-        $employers->contact_email = $request->contact_email;
-
-        // Format and update the mobile number with the country code
-        $mobileNumber = $this->formatMobileNumber($request->mobile);
-        $employers->mobile = $mobileNumber;
-
-        $employers->username = $request->username;
-
-        if ($request->password) {
-            $employers->password = Hash::make($request->password);
-        }
-
-        $employers->save();
-
-        return redirect()->route('employers.index')->with('success', 'Employer updated successfully');
+        $nationalities = Nationality::all();// Find the employer by ID
+        return view('admin.employers.edit', compact('employers','nationalities'));
     }
+
+  public function update(Request $request, $id)
+{
+    $request->validate([
+        'company_name' => 'required|string|max:255',
+        'contact_person' => 'required|string|max:255',
+        'address' => 'required|string|max:255',
+        'contact_email' => 'required|email|unique:employers,contact_email,' . $id,
+        'mobile' => 'required|string',
+        'username' => 'required|string|unique:employers,username,' . $id,
+        'password' => 'nullable|min:6',
+    ]);
+
+    $employers = Employers::findOrFail($id);
+
+    $employers->company_name = $request->company_name;
+    $employers->contact_person = $request->contact_person;
+    $employers->contact_email = $request->contact_email;
+    $employers->address = $request->address;
+    $employers->mobile = $request->mobile;
+    $employers->username = $request->username;
+
+
+    if ($request->password) {
+        $employers->password = Hash::make($request->password);
+    }
+
+    $employers->save();
+
+    return redirect()->route('employers.index')->with('success', 'Employer updated successfully');
+}
+
 
     // Remove the specified employer from the database
     public function destroy($id)
@@ -113,19 +121,25 @@ class EmployerController extends Controller
     }
     }
 
- // Helper function to format mobile number with country code
-public function formatMobileNumber($mobile)
+
+
+public function downloadAllFiles()
 {
-    $phoneUtil = PhoneNumberUtil::getInstance();
+    // Fetch the employers data
+    $employers = Employers::orderBy('created_at', 'desc')->get();
 
-    try {
-        $phoneNumber = $phoneUtil->parse($mobile, null); // Don't set a default region
-        return $phoneUtil->format($phoneNumber, PhoneNumberFormat::E164);
-    } catch (NumberParseException $e) {
-        return $mobile; // Return the original mobile number if formatting fails
-    }
+    // Load your HTML view with the employers data
+    $htmlContent = view('admin.employers.pdf', compact('employers'))->render();
+
+    // Initialize the PDF instance
+    $pdf = PDF::loadHTML($htmlContent);
+
+    // Set page size to A4 in landscape
+    $pdf->setPaper('a4', 'landscape');
+
+    // Download the PDF file
+    return $pdf->download('all_employers.pdf');
 }
-
 
 
 }

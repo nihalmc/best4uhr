@@ -4,7 +4,7 @@
 <div id="content">
     <div class="content-admin-main">
         <div class="wt-admin-right-page-header clearfix">
-            <h2>Manage Jobs</h2>
+            <h2>Post New Jobs</h2>
             <div class="breadcrumbs">
                 <a href="#">Home</a>
                 <a href="#">Dashboard</a>

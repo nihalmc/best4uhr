@@ -17,9 +17,15 @@ use App\Notifications\NewNotification;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\DB;
 use App\Models\Nationality;
+use PDF;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use Illuminate\Support\Facades\Artisan;
 
 class AdminJobController extends Controller
 {
+
+
     public function index(Request $request)
     {
         // Get the search query and selected status from the request
@@ -262,4 +268,44 @@ class AdminJobController extends Controller
 
         return redirect()->route('admin.display')->with('success', 'Job Cv deleted successfully');
     }
+
+
+public function downloadAllFiles()
+{
+    // Query to fetch open job listings
+    $openJobs = Jobs::where('status', 'Open')->orderBy('posted_date', 'desc')->get();
+  foreach ($openJobs as $job) {
+        $job->selectedNationalities = $job ? json_decode($job->nationality) : [];
+    }
+    // Load the PDF library
+    $options = new Options();
+    $options->set('isHtml5ParserEnabled', true);
+    $options->set('isPhpEnabled', true);
+    $dompdf = new Dompdf($options);
+
+    // Generate the PDF content
+    $pdfContent = view('admin.jobs.pdf', compact('openJobs'));
+
+    // Load the HTML content into Dompdf
+    $dompdf->loadHtml($pdfContent);
+
+    // Set paper size and rendering options
+    $dompdf->setPaper('A4', 'landscape');
+
+    // Render the PDF (prevents it from being displayed on the screen)
+    $dompdf->render();
+
+    // Output the PDF as a download
+    return $dompdf->stream('open_jobs.pdf');
+}
+
+public function closeExpiredJobs()
+{
+    \Log::info('Closing expired jobs triggered.');
+    Artisan::call('jobs:close-expired');
+    return redirect()->route('admin.jobs.index')->with('success', 'Expired jobs closed successfully.');
+}
+
+
+
 }

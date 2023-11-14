@@ -8,6 +8,10 @@
     <meta name="author" content="">
     <meta name="robots" content="">
     <meta name="description" content="">
+     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+<meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- FAVICONS ICON -->
     <link rel="icon" href="{{ asset('images/favicon.ico') }}" type="image/x-icon">
@@ -39,6 +43,16 @@
     <link rel="stylesheet" class="skin" type="text/css" href="{{ asset('css/skins-type/skin-6.css') }}">
     <!-- SIDE SWITCHER STYLE SHEET -->
     <link rel="stylesheet" type="text/css" href="{{ asset('css/switcher.css') }}">
+
+<!-- Add the history manipulation script here -->
+ <script>
+        window.onload = function () {
+            if (sessionStorage.getItem('clearHistory')) {
+                window.history.forward(1);
+            }
+        }
+    </script>
+
 </head>
 <body>
     <!-- LOADING AREA START ===== -->
@@ -97,6 +111,11 @@
         <a class="nav-link" data-bs-toggle="tab"  type="button"><i class="fas fa-user-tie"></i>Admin</a>
     </li>
 </ul>
+@if(session('status'))
+    <div class="alert alert-success">
+        {{ session('status') }}
+    </div>
+@endif
                        @if(session('error'))
                     <p class="text-danger">{{ session('error') }}</p>
                     @endif
@@ -168,6 +187,7 @@
   </div>
     </div>
 
+
 <script>
 
 
@@ -187,13 +207,10 @@
         }
     </script>
 
-
-
-
     <!-- JAVASCRIPT  FILES ========================================= -->
-    <script src="{{ asset('js/jquery-3.6.0.min.js') }}"></script>
 
-
+<script src="{{ asset('js/jquery-3.6.0.min.js') }}"></script>
+<script src="{{ asset('js/custom-logout.js') }}"></script>
     <script src="{{ asset('js/jquery-3.6.0.min.js') }}"></script><!-- JQUERY.MIN JS -->
     <script src="{{ asset('js/popper.min.js') }}"></script><!-- POPPER.MIN JS -->
     <script src="{{ asset('js/bootstrap.min.js') }}"></script><!-- BOOTSTRAP.MIN JS -->
@@ -217,6 +234,7 @@
     <script src="{{ asset('js/swiper-bundle.min.js') }}"></script><!-- Swiper JS -->
     <script src="{{ asset('js/custom.js') }}"></script><!-- CUSTOM FUCTIONS  -->
     <script src="{{ asset('js/switcher.js') }}"></script><!-- SHORTCODE FUCTIONS  -->
+
 
 </body>
 </html>

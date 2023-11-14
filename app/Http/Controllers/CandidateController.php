@@ -8,9 +8,12 @@ use App\Models\Candidate;
 use Illuminate\Support\Str;
 use App\Models\CandidateDetail;
 use Illuminate\Support\Facades\DB;
-
+use PDF;
+use App\Models\JobApplication;
 class CandidateController extends Controller
 {
+
+
 public function index(Request $request)
 {
     // Get all candidates by default, ordered by 'created_at' in descending order
@@ -47,8 +50,11 @@ public function index(Request $request)
         'mobile' => 'nullable|string',
         'username' => 'required|string|unique:candidates,username',
         'password' => 'required|min:8',
-        'registration_number' => 'required|string', // Add this line
-    ]);
+        'registration_number' => 'required|string|unique:candidates,registration_number',
+    ], [
+    'registration_number.unique' => 'The registration number has already been taken.',
+]
+);
 
     $candidate = new Candidate();
     $candidate->name = $request->name;
@@ -80,7 +86,10 @@ public function index(Request $request)
         'username' => 'required|string|unique:candidates,username,' . $id,
         'mobile' => 'nullable|string',
         'password' => 'nullable|min:8',
-        'registration_number' => 'required|string', // Add this line
+         'registration_number' => 'required|string|unique:candidates,registration_number,' . $id, // Add this line
+], [
+    'registration_number.unique' => 'The registration number has already been taken.',
+
     ]);
 
     $candidate = Candidate::findOrFail($id);
@@ -101,7 +110,6 @@ public function index(Request $request)
 }
 
 
-
 public function destroy($id)
 {
     DB::beginTransaction();
@@ -109,6 +117,12 @@ public function destroy($id)
     try {
         // Find the Candidate by its ID
         $candidate = Candidate::findOrFail($id);
+
+        // Check if there are associated JobApplications
+        if ($candidate->applications()->exists()) {
+            // If there are associated JobApplications, delete them first
+            $candidate->applications()->delete();
+        }
 
         // Check if there are associated CandidateDetails
         if ($candidate->candidateDetail()->exists()) {
@@ -121,13 +135,18 @@ public function destroy($id)
 
         DB::commit();
 
-        return redirect()->route('candidates.index')->with('success', 'Candidate and associated details deleted successfully');
+        return redirect()->route('candidates.index')->with('success', 'Candidate, associated details, and applications deleted successfully');
     } catch (\Exception $e) {
         DB::rollBack();
 
-        return redirect()->route('candidates.index')->with('error', 'Error deleting candidate and associated details');
+        // Add this line for debugging
+
+        return redirect()->route('candidates.index')->with('error', 'Error deleting candidate, details, and applications');
     }
 }
+
+
+
 
 public function updateStatus(Candidate $candidate, $newStatus)
 {
@@ -143,7 +162,23 @@ public function updateStatus(Candidate $candidate, $newStatus)
     return redirect()->back()->with('error', 'Invalid status');
 }
 
+public function downloadAllFiles()
+{
+    // Fetch the employers data
+    $candidates = Candidate::where('status', 'approved')->orderBy('created_at', 'desc')->get();
 
+    // Load your HTML view with the employers data
+    $htmlContent = view('admin.candidate.pdf', compact('candidates'))->render();
+
+    // Initialize the PDF instance
+    $pdf = PDF::loadHTML($htmlContent);
+
+    // Set page size to A4 in landscape
+    $pdf->setPaper('a4', 'landscape');
+
+    // Download the PDF file
+    return $pdf->download('all_candidate.pdf');
+}
 
 
 }

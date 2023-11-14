@@ -39,10 +39,11 @@ Consultancy</div>
         <div class="form-group col-xl-3 col-lg-6 col-md-6">
             <label>Type</label>
             <select name="field_of_work" class="wt-search-bar-select selectpicker" data-live-search="true">
-                <option value="" selected>Select Category</option>
-                @foreach ($jobs as $job)
-                    <option value="{{ $job->field_of_work }}">{{ $job->field_of_work }}</option>
-                @endforeach
+                <option value="">Select Category</option>
+@foreach ($jobs->unique('field_of_work') as $job)
+    <option value="{{ $job->field_of_work }}">{{ $job->field_of_work }}</option>
+@endforeach
+
             </select>
         </div>
 
@@ -51,7 +52,7 @@ Consultancy</div>
 
 <label>Location</label>
                <select class="wt-search-bar-select selectpicker" id="location" name="location" data-live-search="true">
-                <option value="" selected>Select Location</option>
+                <option value="">Select Location</option>
             <option value="Dubai">Dubai</option>
             <option value="Sharjah">Sharjah</option>
             <option value="Ajman">Ajman</option>

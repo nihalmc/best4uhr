@@ -12,14 +12,17 @@
                     <div class="breadcrumbs"><a href="#">Home</a><a href="#">Dashboard</a><span>Employers</span></div>
                 </div>
  <a href="{{ route('employers.create') }}" class="btn text-white site-bg-black mb-3">Add Employer</a>
+  <a href="{{ route('employers.downloadAllFiles') }}" class="btn text-white site-bg-primary mb-3">Download All Employer Files</a>
                 <div class="twm-pro-view-chart-wrap">
 
-                    <div class="col-lg-12 col-md-12 mb-4">
+
                         <div class="panel panel-default site-bg-white m-t30">
                             <div class="panel-heading wt-panel-heading p-a20">
                                 <h4 class="panel-tittle m-a0"><i class="far fa-list-alt"></i>All Employers</h4>
                             </div>
-                            <div class="panel-body wt-panel-body">
+
+
+                            <div class="panel-body wt-panel-body p-a20 m-b30">
                                 <div class="twm-D_table p-a20 table-responsive">
                                     <table id="candidate_data_table" class="table table-bordered">
                                         <thead>
@@ -27,6 +30,7 @@
 
                                                 <th>Company Name</th>
                                                 <th>Contact Person Name</th>
+                                                 <th>Company Address</th>
                                                  <th>Email</th>
                                                  <th>Mobile</th>
                                                 <th>Action</th>
@@ -51,12 +55,14 @@
 
                                                     </div>
                                                 </td>
-
                                                   <td>{{ $employer->contact_person }}</td>
+                                                  <td>{{ $employer->address }}</td>
                                                 <td>{{ $employer->contact_email }}</td>
+
+
                                                 <td>{{ $employer->mobile }}</td>
                                                  <td>
-                                                    <div class="twm-table-controls">
+                                                    <div class="twm-table-controls" class="twm-jobs-category">
                                                 <ul class="twm-DT-controls-icon list-unstyled">
                                                     <li>
                                                         <button title="Edit" data-bs-toggle="tooltip" data-bs-placement="top">
@@ -76,18 +82,15 @@
                                             </div>
                                                  </td>
                                             </tr>
- </tbody> @endforeach
+                                            @endforeach
+                                    </tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
-                    </div>
+
 
                 </div>
-
-
-
-
             </div>
 
     	</div>
