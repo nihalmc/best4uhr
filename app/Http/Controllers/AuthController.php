@@ -41,11 +41,7 @@ class AuthController extends Controller
         ]);
         if (Auth::guard('user')->attempt($request->only('username', 'password'))) {
            $user = Auth::guard('user')->user();
-            $jobs = Jobs::all();
-            $appliedJobs =JobApplication::all();
-         $jobseekr=Candidate::all();
-         $employer=Employers::all();
-            return view('admin.index' ,compact('user','jobs','appliedJobs','jobseekr','employer'));
+            return redirect()->route('admin.index');
         }
 
 
@@ -59,7 +55,7 @@ public function adminLogout(Request $request)
      Auth::logout();
 
     Auth::guard('user')->logout();
- Auth::guard('candidate')->logout();
+
 
  $request->session()->invalidate();
     $request->session()->regenerateToken();

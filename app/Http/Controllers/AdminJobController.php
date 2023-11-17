@@ -21,6 +21,7 @@ use PDF;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Illuminate\Support\Facades\Artisan;
+use App\Console\Commands\CloseExpiredJobs;
 
 class AdminJobController extends Controller
 {
@@ -56,19 +57,25 @@ class AdminJobController extends Controller
         return view('admin.job_listings', compact('jobs', 'selectedStatus'));
     }
 
-    public function updateStatus(Jobs $job, $newStatus)
-    {
-        $validStatuses = ['Open', 'closed']; // Add your valid statuses here
+ public function updateStatus(Jobs $job, $newStatus)
+{
+    $validStatuses = ['Open', 'Closed']; // Add your valid statuses here
 
-        if (in_array($newStatus, $validStatuses)) {
-            // Logic to change the job status
-            $job->update(['status' => $newStatus]);
-
-            return redirect()->back()->with('success', 'Job status updated successfully');
-        }
-
-        return redirect()->back()->with('error', 'Invalid status');
+    if ($newStatus == 'Open' && now() > $job->closing_date) {
+        return redirect()->route('admin.jobsdetails')->with('error', 'Cannot open job. Closing date has passed.');
     }
+
+    if (in_array($newStatus, $validStatuses)) {
+        // Logic to change the job status
+        $job->update(['status' => $newStatus]);
+
+        return redirect()->back()->with('success', 'Job status updated successfully');
+    }
+
+    return redirect()->route('admin.jobListings')->with('error', 'Invalid status');
+}
+
+
 
     public function appliedJobs(Request $request)
     {
@@ -181,6 +188,12 @@ class AdminJobController extends Controller
 
         return redirect()->route('admin.jobsdetails')->with('success', 'Job listing created successfully');
     }
+
+    public function closeJobs()
+{
+    $exitCode = Artisan::call('jobs:close-expired');
+    return redirect()->route('admin.jobListings')->with('success', 'Job closing triggered successfully.');
+}
 
  public function edit($id)
 {
@@ -303,7 +316,7 @@ public function closeExpiredJobs()
 {
     \Log::info('Closing expired jobs triggered.');
     Artisan::call('jobs:close-expired');
-    return redirect()->route('admin.jobs.index')->with('success', 'Expired jobs closed successfully.');
+    return redirect()->route('admin.jobs.index')->with('success', 'Expired jobs Closed successfully.');
 }
 
 

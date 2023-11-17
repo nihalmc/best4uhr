@@ -17,10 +17,10 @@ class RedirectIfAuthenticated
 }
 
      if ($guard == "employer" && Auth::guard($guard)->check()) {
-            return redirect('/employer/dashboard');
+            return redirect('/employer');
         }
         if (Auth::guard($guard)->check()) {
-            return redirect('/');
+            return redirect('/jobseeker');
         }
 
          return $next($request);

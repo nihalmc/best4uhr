@@ -44,7 +44,7 @@
         <h4 class="section-head-small mb-4">Keyword</h4>
         <div class="input-group">
             <input type="text" class="form-control" name="search_query" placeholder="Job Title or Keyword" value="{{ $searchQuery }}">
-            <button class="btn" type="button" id="searchButton"><i class="feather-search"></i></button>
+            <button class="btn"  type="submit"><i class="feather-search"></i></button>
             <!-- Add the "Refresh" button here -->
             <button class="btn" type="button" onclick="window.location.href = '{{ route('home.jobs') }}';">
         <i class="fas fa-sync-alt"></i>
@@ -251,9 +251,8 @@
                        <option value="40" @if($searchQuery == '40') selected @endif>Show 40</option>
                         <option value="50" @if($searchQuery == '50') selected @endif>Show 50</option>
                                <option value="60" @if($searchQuery == '60') selected @endif>Show 60</option>
-                               <option value="70" @if($searchQuery == '70') selected @endif>Show 70</option>
-                               <option value="80" @if($searchQuery == '80') selected @endif>Show 80</option>
-                               <option value="90" @if($searchQuery == '90') selected @endif>Show 90</option>
+                                <option value="all" @if($searchQuery == 'all') selected @endif>Show All</option>
+
                                 </select>
                                  <button type="submit" class="btn site-bg-black site-text-white">Show </button>
                                 </form>
@@ -289,7 +288,7 @@
                     orange
                 @elseif ($job->status === 'Open')
                     green
-                @elseif ($job->status === 'closed')
+                @elseif ($job->status === 'Closed')
                     red
                 {{-- Add more conditions for other status values as needed --}}
                 @endif

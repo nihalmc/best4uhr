@@ -34,27 +34,34 @@ return [
     | Supported: "session"
     |
     */
-
-    'guards' => [
-        'web' => [
-            'driver' => 'session',
-            'provider' => 'users',
-        ],
-        'user' => [ // Define the 'user' guard
-            'driver' => 'session', // You can choose 'session' or 'token' depending on your authentication method
-            'provider' => 'users', // Use the appropriate user provider
-        ],
-
-        'employer' => [
-            'driver' => 'session',
-            'provider' => 'employers',
-        ],
-
-        'candidate' => [
-            'driver' => 'session',
-            'provider' => 'candidates',
-        ],
+'guards' => [
+    'web' => [
+        'driver' => 'session',
+        'provider' => 'users',
     ],
+
+    'api' => [
+        'driver' => 'token',
+        'provider' => 'users',
+        'hash' => false,
+    ],
+
+    'user' => [ // Define the 'user' guard
+        'driver' => 'session', // You can choose 'session' or 'token' depending on your authentication method
+        'provider' => 'users', // Use the appropriate user provider
+    ],
+
+    'employer' => [
+        'driver' => 'session',
+        'provider' => 'employers',
+    ],
+
+    'candidate' => [
+        'driver' => 'session',
+        'provider' => 'candidates',
+    ],
+],
+
 
     /*
     |--------------------------------------------------------------------------

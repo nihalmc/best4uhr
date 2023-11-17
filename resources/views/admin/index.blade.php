@@ -65,7 +65,12 @@
                                 </div>
                             </div>
                         </div>
-
+<div>
+    <form id="refreshForm" action="{{ route('jobs.close') }}" method="post">
+        @csrf
+        <button type="submit" style="background-color:red" class="btn text-white mb-3">Refresh Date</button>
+    </form>
+</div>
 
                                         </div>
                                     </div>
@@ -80,5 +85,23 @@
             </div>
 
     	</div>
+ <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Set the time for the automatic click (adjust as needed)
+        const dailyClickTime = '11:55'; // for example, 3 AM
+
+        // Get the current date and time
+        const now = new Date();
+
+        // Format the current time as HH:mm
+        const currentTime = `${now.getHours()}:${now.getMinutes()}`;
+
+        // Check if the current time is equal to the desired daily click time
+        if (currentTime === dailyClickTime) {
+            // Trigger the click event of the form
+            document.getElementById('refreshForm').submit();
+        }
+    });
+</script>
 
         @endsection

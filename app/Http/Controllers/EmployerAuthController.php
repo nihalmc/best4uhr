@@ -10,6 +10,8 @@ use App\Models\Jobs;
 
 class EmployerAuthController extends Controller
 {
+
+
     public function index()
     {
         $employer = Auth::guard('employer')->user();

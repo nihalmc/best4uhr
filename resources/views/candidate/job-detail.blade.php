@@ -131,9 +131,13 @@
                                     <div class=" twm-job-self-wrap text-center">
                                     <div class=" twm-job-self-info">
  <div class="twm-job-self-bottom">
-                                                        <a class="site-button" href="#apply_job_popup" data-bs-toggle="modal" role="button">
-                                                            Apply Now
-                                                        </a>
+                                                         @if ($job->status === 'Open')
+    <a class="site-button" href="#apply_job_popup" data-bs-toggle="modal" role="button">
+        Apply Now
+    </a>
+@else
+    <p ><span style="color:red ">This job is currently Closed. Applications are not being accepted.</span></p>
+@endif
                                                     </div>
                                                </div>
                                                </div>

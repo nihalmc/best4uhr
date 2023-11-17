@@ -12,6 +12,8 @@ use App\Models\JobApplication;
 
 class CandidateAuthController extends Controller
 {
+
+
     public function index()
     {
         $candidate = Auth::guard('candidate')->user();
@@ -58,12 +60,19 @@ class CandidateAuthController extends Controller
 }
 
 
-    // Logout the candidate
-    public function logout()
-    {
-        Auth::guard('candidate')->logout();
-        return redirect()->route('home')->with('success', 'Logged out successfully.');
-    }
+   public function logout(Request $request)
+{
+    Auth::guard('candidate')->logout();
+
+    // Additional logout logic or data for the view
+    $additionalData = [
+        'logoutMessage' => 'Logged out successfully.',
+        'additionalScript' => '<script>alert("Additional logout script");</script>',
+    ];
+
+    return redirect()->route('home')->with($additionalData);
+}
+
 
     public function showRegistrationForm()
     {

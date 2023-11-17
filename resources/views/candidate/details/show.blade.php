@@ -14,7 +14,7 @@
                     orange
                 @elseif ($job->status === 'Open')
                     green
-                @elseif ($job->status === 'closed')
+                @elseif ($job->status === 'Closed')
                     red
                 {{-- Add more conditions for other status values as needed --}}
                 @endif

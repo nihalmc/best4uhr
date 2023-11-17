@@ -10,12 +10,14 @@ use App\Models\CandidateDetail;
 use Illuminate\Support\Facades\DB;
 use PDF;
 use App\Models\JobApplication;
+use Illuminate\Support\Facades\Auth;
 class CandidateController extends Controller
 {
 
 
 public function index(Request $request)
 {
+    $user = Auth::guard('user')->user();
     // Get all candidates by default, ordered by 'created_at' in descending order
     $candidates = Candidate::orderBy('created_at', 'desc')->get();
 
@@ -38,6 +40,7 @@ public function index(Request $request)
     // Show the form for creating a new employer
     public function create()
     {
+        $user = Auth::guard('user')->user();
         return view('admin.candidate.create');
     }
 

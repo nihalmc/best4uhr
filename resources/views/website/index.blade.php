@@ -29,7 +29,7 @@ Consultancy</div>
             <label>What</label>
             <select name="job_position" class="wt-search-bar-select selectpicker" data-live-search="true">
                 <option value="" selected>Select Category</option>
-                @foreach ($jobs as $job)
+                @foreach ($jobs->unique('job_position') as $job)
                     <option value="{{ $job->job_position }}">{{ $job->job_position }}</option>
                 @endforeach
             </select>
@@ -234,7 +234,7 @@ Consultancy</div>
                     orange
                 @elseif ($job->status === 'Open')
                     green
-                @elseif ($job->status === 'closed')
+                @elseif ($job->status === 'Closed')
                     red
                 {{-- Add more conditions for other status values as needed --}}
                 @endif
@@ -391,5 +391,6 @@ new resources.</p>
 
         </div>
         <!-- CONTENT END -->
+
 
 @endsection

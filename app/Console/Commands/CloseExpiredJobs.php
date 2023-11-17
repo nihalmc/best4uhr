@@ -32,8 +32,8 @@ class CloseExpiredJobs extends Command
 
             if ($expiredJobsCount > 0) {
                 foreach ($expiredJobs as $job) {
-                    // Update the status of each job to 'closed'
-                    $job->update(['status' => 'closed']);
+                    // Update the status of each job to 'Closed'
+                    $job->update(['status' => 'Closed']);
                 }
 
                 $this->info("Closed {$expiredJobsCount} expired jobs successfully.");

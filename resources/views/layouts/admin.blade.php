@@ -46,9 +46,14 @@
     <link rel="stylesheet" class="skin" type="text/css" href="{{ asset('css/skins-type/skin-6.css') }}">
     <!-- SIDE SWITCHER STYLE SHEET -->
     <link rel="stylesheet" type="text/css" href="{{ asset('css/switcher.css') }}">
-
+<script type="text/javascript">
+        window.history.forward();
+        function noBack() {
+            window.history.forward();
+        }
+    </script>
 </head>
-<body>
+<body onload="noBack();">
     <!-- LOADING AREA START ===== -->
     <div class="loading-area">
         <div class="loading-box"></div>
@@ -99,10 +104,20 @@
                                             </a>
                                             <div class="dropdown-menu" aria-labelledby="ID-ACCOUNT_dropdown">
 
-                                                <ul>
-                                                    <li><a href="{{ route('admin.index') }}"><i class="fa fa-home"></i>Dashboard</a></li>
-                                                    <li><a href="javascript:;" data-bs-toggle="modal" data-bs-target="#logout-dash-profile"><i class="fa fa-share-square"></i> Logout</a></li>
-                                                </ul>
+                                               <ul>
+    <li><a href="{{ route('admin.index') }}"><i class="fa fa-home"></i>Dashboard</a></li>
+
+    <!-- Add the Close Jobs button here -->
+    <li>
+        <form action="{{ route('jobs.close') }}" method="post">
+            @csrf
+            <button type="submit" style="background-color:red" class="btn text-white mb-3">Close Jobs</button>
+        </form>
+    </li>
+
+    <li><a href="javascript:;" data-bs-toggle="modal" data-bs-target="#logout-dash-profile"><i class="fa fa-share-square"></i> Logout</a></li>
+</ul>
+
 
 
                                             </div>

@@ -70,7 +70,7 @@
                             <div class="twm-right-section-panel candidate-save-job site-bg-gray">
                                 <!--Filter Short By-->
                                 <div class="product-filter-wrap d-flex justify-content-between align-items-center">
-                                    <span class="woocommerce-result-count-left">Applied 250 jobs</span>
+                                    <span class="woocommerce-result-count-left">Applied {{$appliedJobs->count() }} jobs</span>
 
                                     <form class="woocommerce-ordering twm-filter-select" method="get">
                                         <span class="woocommerce-result-count">Short By</span>
@@ -120,7 +120,7 @@
                     orange
                 @elseif ($application->job->status === 'Open')
                     green
-                @elseif ($application->job->status === 'closed')
+                @elseif ($application->job->status === 'Closed')
                     red
                 {{-- Add more conditions for other status values as needed --}}
                  @endif" >{{ $application->job->status }}</span></div>

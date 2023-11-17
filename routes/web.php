@@ -58,7 +58,6 @@ Route::post('/admin/login',[AuthController::class, 'adminLogin'])->name('admin.l
 
 
 Route::group(['middleware' => 'auth:user'], function () {
-
     Route::get('/admin/dashboard', [AuthController::class, 'index'])->name('admin.index');
 Route::post('/admin/logout', [AuthController::class, 'adminLogout'])->name('admin.logout');
 
@@ -86,12 +85,12 @@ Route::put('admin/jobs/update/{id}', [AdminJobController::class, 'update'])->nam
 Route::delete('admin/jobs/destroy/{id}', [AdminJobController::class, 'destroy'])->name('admin.jobs.destroy');
 
 Route::get('/admin/jobs/download-open-pdf', [AdminJobController::class,'downloadAllFiles'])->name('admin.jobs.downloadOpenPDF');
+// File: routes/web.php
+
+Route::post('/jobs/close', [AdminJobController::class, 'closeJobs'])->name('jobs.close');
+
 Route::get('/change-password', [AuthController::class, 'showChangePasswordForm'])->name('change.password.form');
 Route::post('/change-password', [AuthController::class, 'changePassword'])->name('change.password');
-
-
-
-
 
 
 
@@ -120,6 +119,7 @@ Route::get('/employer/change-password', [EmployerAuthController::class, 'showCha
 
 // Handle the change password form submission
 Route::post('/employer/change-password', [EmployerAuthController::class, 'changePassword'])->name('employer.change.password');
+
 
 Route::get('/employer/logout', [EmployerAuthController::class, 'logout'])->name('employer.logout');
 Route::get('/employer/register', [EmployerAuthController::class, 'showRegistrationForm'])->name('employer.register');

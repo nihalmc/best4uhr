@@ -11,8 +11,12 @@
                     <h2>Manage Jobs</h2>
                     <div class="breadcrumbs"><a href="#">Home</a><a href="#">Dashboard</a><span>My Job Listing</span></div>
                 </div>
-
-                <!--Basic Information-->
+<div class="status-counts">
+    <p class="status-count open-count">Open Jobs: {{ $jobs->where('status', 'Open')->count() }}</p>
+    <p class="status-count Closed-count">Closed Jobs: {{ $jobs->where('status', 'Closed')->count() }}</p>
+    <p class="status-count pending-count">Pending Jobs: {{ $jobs->where('status', 'pending')->count() }}</p>
+</div>
+               <!--Basic Information-->
                 <div class="panel panel-default">
                     <div class="panel-heading wt-panel-heading p-a20">
                         <h4 class="panel-tittle m-a0"><i class="fa fa-suitcase"></i> Job Details</h4>
@@ -68,7 +72,7 @@
                     orange
                 @elseif ($job->status === 'Open')
                     green
-                @elseif ($job->status === 'closed')
+                @elseif ($job->status === 'Closed')
                     red
                 {{-- Add more conditions for other status values as needed --}}
                 @endif
@@ -87,7 +91,7 @@
                             <button type="submit" class="btn btn-success">Open</button>
                         </form>
 
-                        <form action="{{ route('jobs.update-status', ['job' => $job, 'status' => 'closed']) }}" method="POST" style="display: inline;">
+                        <form action="{{ route('jobs.update-status', ['job' => $job, 'status' => 'Closed']) }}" method="POST" style="display: inline;">
                             @csrf
                             @method('PUT')
                             <button type="submit" class="btn btn-danger ml-2">Close</button>

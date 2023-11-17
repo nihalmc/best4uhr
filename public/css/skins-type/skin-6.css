@@ -102,19 +102,19 @@
   background-color: #fff;
 }
 .footer-dark .widget-title {
-  color: #d81f34;
+  color: #1967d2;
 }
 .footer-dark .widget-title:before {
-  background-color: #d81f34;
+  background-color: #1967d2;
 }
 .footer-dark .social-icons {
   margin: 0px;
 }
 .footer-dark .social-icons li a {
-  color: #d81f34;
+  color: #1967d2;
 }
 .footer-dark .social-icons li a:hover {
-  color: #1967d2;
+  color: #fff;
 }
 .footer-dark .widget_services ul li a:hover {
   color: #1967d2;

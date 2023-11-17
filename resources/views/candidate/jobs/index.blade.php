@@ -44,20 +44,21 @@
 
                                 <div class="sidebar-elements search-bx">
 
-                                   <form action="{{ route('candidate.jobs.index') }}" method="GET" id="searchForm">
-                                    @csrf
+                  <form action="{{ route('candidate.jobs.index') }}" method="GET" id="searchForm">
+    @csrf
     <div class="form-group mb-4">
         <h4 class="section-head-small mb-4">Keyword</h4>
         <div class="input-group">
             <input type="text" class="form-control" name="search_query" placeholder="Job Title or Keyword" value="{{ $searchQuery }}">
-            <button class="btn" type="button" id="searchButton"><i class="feather-search"></i></button>
+            <button class="btn" type="submit"><i class="feather-search"></i></button>
             <!-- Add the "Refresh" button here -->
             <button class="btn" type="button" onclick="window.location.href = '{{ route('candidate.jobs.index') }}';">
-        <i class="fas fa-sync-alt"></i>
+                <i class="fas fa-sync-alt"></i>
             </button>
         </div>
     </div>
 </form>
+
 
 
 <!-- <div class="form-group mb-4">
@@ -245,22 +246,42 @@
  <div class="col-lg-8 col-md-12">
                             <!--Filter Short By-->
                             <div class="product-filter-wrap d-flex justify-content-between align-items-center m-b30">
-                             <span class="woocommerce-result-count-left">Showing {{ $jobs->total() }} jobs</span>
+                            <span class="woocommerce-result-count-left">
+    Showing {{ $jobs->count() }} out of {{ $totalJobsCount }} jobs
+</span>
 
 
-                                <form class="woocommerce-ordering twm-filter-select" action="{{ route('candidate.jobs.index') }}" method="GET" >
-@csrf
-                                     <select name="jobs_per_page" class="wt-select-bar-2 selectpicker" data-live-search="true" data-bv-field="size">
-                                <option value="10" @if($searchQuery == '10') selected @endif>Show 10</option>
-                             <option value="20" @if($searchQuery == '20') selected @endif>Show 20</option>
-                         <option value="30" @if($searchQuery == '30') selected @endif>Show 30</option>
-                       <option value="40" @if($searchQuery == '40') selected @endif>Show 40</option>
-                        <option value="50" @if($searchQuery == '50') selected @endif>Show 50</option>
-                               <option value="60" @if($searchQuery == '60') selected @endif>Show 60</option>
-                               <option value="" @if($searchQuery == '') selected @endif>Show </option>
-                                </select>
-                                 <button type="submit" class="btn site-bg-black site-text-white">Show</button>
-                                </form>
+
+        <form class="woocommerce-ordering twm-filter-select" action="{{ route('candidate.jobs.index') }}" method="GET" id="jobsPerPageForm">
+    @csrf
+    <div class="form-group mb-4">
+        <h4 class="section-head-small mb-4">Number of Jobs</h4>
+        <div class="input-group">
+            <select name="jobs_per_page" id="jobsPerPage" class="wt-select-bar-2 selectpicker" data-live-search="true" data-bv-field="size">
+                <option value="10" @if($searchQuery == '10') selected @endif>Show 10</option>
+                <option value="20" @if($searchQuery == '20') selected @endif>Show 20</option>
+                <option value="30" @if($searchQuery == '30') selected @endif>Show 30</option>
+                <option value="40" @if($searchQuery == '40') selected @endif>Show 40</option>
+                <option value="50" @if($searchQuery == '50') selected @endif>Show 50</option>
+                <option value="60" @if($searchQuery == '60') selected @endif>Show 60</option>
+                <option value="all" @if($searchQuery == 'all') selected @endif>Show All</option>
+            </select>
+        </div>
+    </div>
+</form>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    // Wait for the document to be ready
+    $(document).ready(function () {
+        // Listen for changes in the dropdown
+        $('#jobsPerPage').change(function () {
+            // Submit the form when the dropdown changes
+            $('#jobsPerPageForm').submit();
+        });
+    });
+</script>
+
 
                             </div>
 
@@ -295,7 +316,7 @@
                     orange
                 @elseif ($job->status === 'Open')
                     green
-                @elseif ($job->status === 'closed')
+                @elseif ($job->status === 'Closed')
                     red
                 {{-- Add more conditions for other status values as needed --}}
                 @endif
@@ -332,6 +353,16 @@
 
         searchButton.addEventListener('click', function () {
             searchForm.submit();
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        // Listen for changes in the jobs per page selection
+        $('#jobsPerPage').change(function () {
+            // Submit the form when the selection changes
+            $('#jobsPerPageForm').submit();
         });
     });
 </script>

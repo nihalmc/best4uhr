@@ -45,16 +45,15 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('css/switcher.css') }}">
 
 <!-- Add the history manipulation script here -->
- <script>
-        window.onload = function () {
-            if (sessionStorage.getItem('clearHistory')) {
-                window.history.forward(1);
-            }
+ <script type="text/javascript">
+        window.history.forward();
+        function noBack() {
+            window.history.forward();
         }
     </script>
 
 </head>
-<body>
+<body onload="noBack();">
     <!-- LOADING AREA START ===== -->
     <div class="loading-area">
         <div class="loading-box"></div>

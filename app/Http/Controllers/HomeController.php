@@ -23,8 +23,8 @@ class HomeController extends Controller
         ->orderBy('posted_date', 'desc') // Order by posted_date in descending order
         ->take(10) // Limit the result to 10 jobs
         ->get();
-         $nationalities = Nationality::all();
-    return view('website.index' , compact('jobs','nationalities'));
+
+    return view('website.index' , compact('jobs'));
    }
 
     public function search(Request $request)
@@ -35,7 +35,7 @@ class HomeController extends Controller
         $location = $request->input('location');
 
         // Query the database to find matching jobs based on the criteria
-        $jobs = Jobs::where('status', 'Open')
+        $jobs = Jobs::where('status', 'Open','Closed')
             ->when($jobTitle, function ($query, $jobTitle) {
                 return $query->where('job_position', $jobTitle);
             })
@@ -46,9 +46,9 @@ class HomeController extends Controller
                 return $query->where('location', 'like', '%' . $location . '%');
             })
             ->get();
- $nationalities = Nationality::all();
+
         // Return the search results to a view
-        return view('website.index', compact('jobs','nationalities'));
+        return view('website.index', compact('jobs'));
     }
 
      public function store(Request $request)
@@ -87,10 +87,13 @@ public function indexd(Request $request)
 {
     // Get the search query and jobs per page value from the request
     $searchQuery = $request->input('search_query');
-    $jobsPerPage = $request->input('jobs_per_page', 10); // Default to 10 if not specified
+    $jobsPerPage = (int)$request->input('jobs_per_page', 10); // Cast to integer; default to 10 if not specified
 
-    // Build a query to fetch jobs with "Open" status and apply search filters
-    $query = Jobs::where('status', 'Open');
+    // Build a query to fetch jobs with both "Open" and "Closed" statuses and apply search filters
+    $query = Jobs::where(function ($q) {
+        $q->where('status', 'Open')
+            ->orWhere('status', 'Closed');
+    });
 
     if ($searchQuery) {
         $query->where(function ($q) use ($searchQuery) {
@@ -181,15 +184,15 @@ public function show($jobId)
     // Decode the 'nationality' field to get the selected nationalities for this job
     $job->selectedNationalities = json_decode($job->nationality);
 
-    $nationalities = Nationality::all();
-    return view('website.job-detail', compact('job','nationalities'));
+
+    return view('website.job-detail', compact('job'));
 }
 
 
 
    function contact(){
-$nationalities = Nationality::all();
-    return view('website.contact', compact('nationalities'));
+
+    return view('website.contact');
    }
 
 
@@ -244,16 +247,16 @@ $nationalities = Nationality::all();
    }
 
     function profile(){
-$nationalities = Nationality::all();
-    return view('website.profile', compact('nationalities'));
+
+    return view('website.profile');
    }
     function recruitments(){
-$nationalities = Nationality::all();
-    return view('website.recruitments', compact('nationalities'));
+
+    return view('website.recruitments');
    }
     function specialization(){
-$nationalities = Nationality::all();
-    return view('website.specialization', compact('nationalities'));
+
+    return view('website.specialization');
    }
 
 

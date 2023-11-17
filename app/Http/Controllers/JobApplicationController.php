@@ -25,10 +25,12 @@ public function index(Request $request)
 
     // Get the search query and jobs per page value from the request
     $searchQuery = $request->input('search_query');
-    $jobsPerPage = $request->input('jobs_per_page', 10); // Default to 10 if not specified
+    $jobsPerPage = (int)$request->input('jobs_per_page', 10);
 
     // Build a query to fetch jobs with "Open" status and apply search filters
-    $query = Jobs::where('status', 'Open');
+    $query = Jobs::where(function ($q) {
+        $q->where('status', 'Open')->orWhere('status', 'Closed');
+    });
 
     if ($searchQuery) {
         $query->where(function ($q) use ($searchQuery) {
@@ -38,14 +40,24 @@ public function index(Request $request)
         });
     }
 
-    // Order the jobs by posted_date in descending order
-    $query->orderBy('posted_date', 'desc');
+    // Check for "Show All" option
+    if ($request->has('jobs_per_page') && $request->input('jobs_per_page') === 'all') {
+        // No pagination for "Show All"
+        $jobs = $query->orderBy('posted_date', 'desc')->get();
+        $totalJobsCount = $jobs->count(); // Total count for "Show All"
+    } else {
+        // Paginate the results
+        $jobs = $query->orderBy('posted_date', 'desc')->paginate($jobsPerPage);
+        $totalJobsCount = $jobs->total(); // Total count for paginated results
+    }
 
-    // Fetch jobs based on the search query and status, limited by the jobs per page value
-    $jobs = $query->paginate($jobsPerPage);
+    if ($request->ajax()) {
+        return response()->json(['jobs' => $jobs, 'totalJobsCount' => $totalJobsCount]);
+    }
 
-    return view('candidate.jobs.index', compact('jobs', 'searchQuery'));
+    return view('candidate.jobs.index', compact('jobs', 'searchQuery', 'totalJobsCount'));
 }
+
 
 
 
