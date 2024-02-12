@@ -21,13 +21,13 @@ HR
 Consultancy</div>
 
                             <div class="twm-bnr-search-bar">
-                               <form method="GET" action="{{ route('search') }}">
+                               <form id="jobSearchForm" method="GET" action="{{ route('search') }}">
                                 @csrf
     <div class="row">
         <!-- Title -->
         <div class="form-group col-xl-3 col-lg-6 col-md-6">
             <label>What</label>
-            <select name="job_position" class="wt-search-bar-select selectpicker" data-live-search="true">
+            <select name="job_position" id="jobPositionInput" class="wt-search-bar-select selectpicker" data-live-search="true">
                 <option value="" selected>Select Category</option>
                 @foreach ($jobs->unique('job_position') as $job)
                     <option value="{{ $job->job_position }}">{{ $job->job_position }}</option>
@@ -38,7 +38,7 @@ Consultancy</div>
         <!-- All Category -->
         <div class="form-group col-xl-3 col-lg-6 col-md-6">
             <label>Type</label>
-            <select name="field_of_work" class="wt-search-bar-select selectpicker" data-live-search="true">
+            <select name="field_of_work"  class="wt-search-bar-select selectpicker" data-live-search="true">
                 <option value="">Select Category</option>
 @foreach ($jobs->unique('field_of_work') as $job)
     <option value="{{ $job->field_of_work }}">{{ $job->field_of_work }}</option>
@@ -67,7 +67,7 @@ Consultancy</div>
 
         <!-- Find job button -->
         <div class="form-group col-xl-3 col-lg-6 col-md-6">
-            <button type="submit" class="site-button">Find Job</button>
+            <button type="submit" data-bs-target="#jobsListSection"  class="site-button">Find Job</button>
         </div>
     </div>
 </form>
@@ -205,8 +205,8 @@ Consultancy</div>
                     </div>
                     <!-- TITLE END-->
 
-
-                    <div class="section-content">
+@if($jobs->isNotEmpty())
+                    <div class="section-content" id="jobsListSection">
                        <div class="twm-jobs-list-wrap">
                            <ul>
                             @foreach($jobs as $job)
@@ -256,7 +256,7 @@ Consultancy</div>
                 </div>
             </div>
             <!-- JOB POST END -->
-
+@endif
 
             <!-- JOBS CATEGORIES SECTION START -->
             <!-- <div class="section-full p-t60 p-b60 site-bg-gray twm-job-categories-area">
@@ -388,9 +388,54 @@ new resources.</p>
 
             <!-- OUR BLOG END -->
 
+<div class="section-full p-t10 p-b30 site-bg-white twm-candidate-h-page7-wrap pos-relative ">
+
+
+                <div class="twm-bg-candi-pattern"></div>
+
+                <div class="container">
+                    <div class="twm-j-ofr-wrap">
+                        <div class="twm-j-ofr-content" style="background-image: url(images/home-7/ofr-bg.jpg);">
+                            <div class="row">
+                                <div class="col-lg-7 col-md-12">
+
+                                    <div class="twm-j-ofr-map-content">
+                                        <!-- TITLE START-->
+                                        <div class="section-head left wt-small-separator-outer">
+                                            <h2 class="wt-title">WE ARE EXPERTS IN<br><span class="site-text-primary">GLOBAL VISA SERVICES</span></h2>
+                                        </div>
+                                        <!-- TITLE END-->
+
+
+                                        <div class="twm-read-more">
+                                            <a href="https://best4utourism.com/globalvisasa" target="_blank" class="site-button">VISIT OUR WEBSITE</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-5 col-md-12">
+                                    <div class="twm-j-ofr-map">
+                                        <div class="twm-media">
+                                            <img src="images/home-7/map-img.png" alt="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
 
         </div>
         <!-- CONTENT END -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<div>
+    <form class="hidden" id="refreshForm" action="{{ route('jobs.close') }}" method="post" >
+        @csrf
+        <button type="submit" style="background-color:red" class="btn text-white mb-3">Refresh Date</button>
+    </form>
+</div>
 
 
 @endsection

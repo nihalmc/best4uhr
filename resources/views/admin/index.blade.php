@@ -85,23 +85,33 @@
             </div>
 
     	</div>
- <script>
+
+<script>
     document.addEventListener('DOMContentLoaded', function () {
         // Set the time for the automatic click (adjust as needed)
-        const dailyClickTime = '11:55'; // for example, 3 AM
+        const dailyClickTime = '13:20'; // 1:15 PM
 
-        // Get the current date and time
-        const now = new Date();
+        // Function to check and submit the form
+        function checkAndSubmitForm() {
+            const now = new Date();
+            const currentHoursMinutes = `${('0' + now.getHours()).slice(-2)}:${('0' + now.getMinutes()).slice(-2)}`;
 
-        // Format the current time as HH:mm
-        const currentTime = `${now.getHours()}:${now.getMinutes()}`;
-
-        // Check if the current time is equal to the desired daily click time
-        if (currentTime === dailyClickTime) {
-            // Trigger the click event of the form
-            document.getElementById('refreshForm').submit();
+            // Check if the current time is equal to the desired daily click time
+            if (currentHoursMinutes === dailyClickTime) {
+                // Trigger the click event of the form
+                document.getElementById('refreshForm').submit();
+            }
         }
+
+        // Check and submit the form every minute (adjust the interval as needed)
+        setInterval(checkAndSubmitForm, 60000);
     });
 </script>
+
+
+
+
+
+
 
         @endsection

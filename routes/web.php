@@ -29,6 +29,8 @@ use App\Http\Controllers\JobApplicationController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::post('/home-cv-drop', [HomeController::class, 'store'])->name('home.upload');
+Route::get('/enquriform', [HomeController::class, 'enquriform'])->name('enquriform');
+Route::post('/enquriformupload', [HomeController::class, 'enquriformupload'])->name('enquriformupload');
 
 Route::get('/search', [HomeController::class, 'search'])->name('search');
 
@@ -36,7 +38,7 @@ Route::get('/homejobs', [HomeController::class, 'indexd'])->name('home.jobs');
 Route::get('/Postjobs', [HomeController::class, 'postjobs'])->name('post.jobs');
 Route::get('/home/{jobId}/job-detail', [HomeController::class, 'show'])->name('Home.job-detail');
 
-Route::resource('free-jobs', HomeController::class);
+Route::resource('free-jobs', HomeController::class); 
 Route::get('/career', [HomeController::class, 'career'])->name('home.career');
 Route::get('/profile', [HomeController::class, 'profile'])->name('home.profile');
 Route::get('/recruitments', [HomeController::class, 'recruitments'])->name('home.recruitments');
@@ -72,11 +74,15 @@ Route::prefix('admin')->group(function () {
     Route::put('/applied-jobs/{application}/update-lstatus', [AdminJobController::class, 'updateLStatus'])
     ->name('applied-jobs.update-lstatus');
      Route::get('/candidate/Cvenquiry', [AdminJobController::class, 'display'])->name('admin.display');
+     Route::get('/generate-pdf',[AdminJobController::class, 'generatePdf'])->name('generatePdf');
 Route::delete('/Cvenquiry/delete/{id}', [AdminJobController::class, 'cvenquiry'])->name('cvenquiry.destroy');
 Route::get('admin/jobsdetails', [AdminJobController::class, 'show'])->name('admin.jobsdetails');
  Route::get('admin/jobs/create',[AdminJobController::class ,'create'] )->name('admin.jobs.create');
 Route::post('admin/jobs/store', [AdminJobController::class ,'store'])->name('admin.jobs.store');
  Route::get('admin/jobs/show{id}',[AdminJobController::class ,'showjob'] )->name('admin.jobs.show');
+// routes/web.php
+
+
 
 Route::get('admin/jobs/edit/{id}', [AdminJobController::class, 'edit'])->name('admin.jobs.edit');
 
@@ -109,6 +115,7 @@ Route::put('/candidates/{candidate}/update-status/{status}', [CandidateControlle
     ->name('candidates.updateStatus');
 
 // Employer Login Routes
+Route::post('/employer/register', [EmployerAuthController::class, 'register'])->name('employer.register.submit');
 Route::get('/employer/login', [EmployerAuthController::class, 'showLoginForm'])->name('employer.login');
 Route::post('/employer/login', [EmployerAuthController::class, 'login'])->name('employer.loginsubmit');
 Route::middleware(['employer.auth'])->group(function () {
@@ -124,7 +131,7 @@ Route::post('/employer/change-password', [EmployerAuthController::class, 'change
 Route::get('/employer/logout', [EmployerAuthController::class, 'logout'])->name('employer.logout');
 Route::get('/employer/register', [EmployerAuthController::class, 'showRegistrationForm'])->name('employer.register');
 // Handle employer registration form submission
-Route::post('/employer/register', [EmployerAuthController::class, 'register'])->name('employer.register.submit');
+
 
 Route::resource('jobs', JobController::class);
 // Show the change password form
@@ -147,6 +154,7 @@ Route::put('/job-applications/{application}/update-last-status', [JobController:
 
 Route::get('/jobseeker/login', [CandidateAuthController::class, 'showLoginForm'])->name('candidate.login');
 Route::post('/jobseeker/login', [CandidateAuthController::class, 'login'])->name('candidate.loginsubmit');
+Route::post('/jobseeker/register', [CandidateAuthController::class, 'register'])->name('candidate.register.submit');
 
 Route::middleware(['candidate.auth'])->group(function () {
     Route::get('/jobseeker/dashboard',[CandidateAuthController::class, 'login'])->name('candidate.dashboard');
@@ -157,7 +165,7 @@ Route::get('/jobseeker/logout', [CandidateAuthController::class, 'logout'])->nam
 
 Route::get('/jobseeker/register', [CandidateAuthController::class, 'showRegistrationForm'])->name('candidate.register');
 // Handle employer registration form submission
-Route::post('/jobseeker/register', [CandidateAuthController::class, 'register'])->name('candidate.register.submit');
+
 
 // Show the change password form
 Route::get('/jobseeker/change-password', [CandidateAuthController::class, 'showChangePasswordForm'])->name('candidate.change.password.form');

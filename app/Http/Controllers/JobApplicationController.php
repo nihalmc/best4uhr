@@ -25,12 +25,10 @@ public function index(Request $request)
 
     // Get the search query and jobs per page value from the request
     $searchQuery = $request->input('search_query');
-    $jobsPerPage = (int)$request->input('jobs_per_page', 10);
+    $jobsPerPage = (int) $request->input('jobs_per_page', 10);
 
-    // Build a query to fetch jobs with "Open" status and apply search filters
-    $query = Jobs::where(function ($q) {
-        $q->where('status', 'Open')->orWhere('status', 'Closed');
-    });
+    // Build a query to fetch jobs with "Open" and "Closed" status and apply search filters
+    $query = Jobs::where('status', 'Open')->orWhere('status', 'Closed');
 
     if ($searchQuery) {
         $query->where(function ($q) use ($searchQuery) {
@@ -39,6 +37,9 @@ public function index(Request $request)
                 ->orWhere('location', 'like', '%' . $searchQuery . '%');
         });
     }
+
+    // Order the jobs by status and then by posted_date in descending order
+    $query->orderByRaw('FIELD(status, "Open", "Closed")')->orderBy('posted_date', 'desc');
 
     // Check for "Show All" option
     if ($request->has('jobs_per_page') && $request->input('jobs_per_page') === 'all') {

@@ -163,7 +163,7 @@
                                                 <div class="twm-s-info-inner">
                                                     <i class="fas fa-at"></i>
                                                     <span class="twm-title">Email</span>
-                                                    <div class="twm-s-info-discription" ><a href="mailto:info@best4uhr.com" target="_blank">best4uhr@gmail.com</a></div>
+                                                    <div class="twm-s-info-discription" ><a href="mailto:info@best4uhr.com" target="_blank">info@best4uhr.com</a></div>
                                                 </div>
                                             </li>
                                             <li>

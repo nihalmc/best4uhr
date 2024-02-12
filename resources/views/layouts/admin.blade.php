@@ -107,13 +107,6 @@
                                                <ul>
     <li><a href="{{ route('admin.index') }}"><i class="fa fa-home"></i>Dashboard</a></li>
 
-    <!-- Add the Close Jobs button here -->
-    <li>
-        <form action="{{ route('jobs.close') }}" method="post">
-            @csrf
-            <button type="submit" style="background-color:red" class="btn text-white mb-3">Close Jobs</button>
-        </form>
-    </li>
 
     <li><a href="javascript:;" data-bs-toggle="modal" data-bs-target="#logout-dash-profile"><i class="fa fa-share-square"></i> Logout</a></li>
 </ul>
@@ -222,7 +215,14 @@
         // Display an error alert
         alert("{{ session('error') }}");
     @endif
+
+    @if($errors->any())
+        alert("{{ implode('\n', $errors->all()) }}");
+    @endif
 </script>
+<!-- Include jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <!-- JAVASCRIPT  FILES ========================================= -->
     <script src="{{ asset('js/jquery-3.6.0.min.js') }}"></script><!-- JQUERY.MIN JS -->
     <script src="{{ asset('js/popper.min.js') }}"></script><!-- POPPER.MIN JS -->

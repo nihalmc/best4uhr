@@ -24,7 +24,7 @@
 
                             <div class="panel-body wt-panel-body">
                                 <div class="twm-D_table p-a20 table-responsive">
-                                    <table id="candidate_data_table" class="table table-bordered ">
+                                    <table id="candidate_data_table" class="table table-bordered">
                                         <thead>
                                             <tr>
 

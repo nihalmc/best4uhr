@@ -4,17 +4,25 @@
     <!-- META -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="keywords" content="">
-    <meta name="author" content="">
-    <meta name="robots" content="">
-    <meta name="description" content="">
+    <meta name="keywords" content="Best For You HR Consultancy, Dubai, UAE , Find the Best Jobs in UAE, Job Consultant, HR Consultancy, Job Consultant Dubai, HR Consultancy Dubai, Jobs in Dubai, Jobs in Sharjah, Jobs in Ajman, Jobs in Ras Al Khaimah, Jobs in Abu Dhabi, Jobs in Fujairah,Jobs in Umm Al Quwain ">
+    <meta property="og:site_name" content="Best For You HR Consultancy" />
+    <meta name="author" content="Best For You HR Consultancy" />
+    <meta name="robots" content="" />
+    <meta name="description" content="Best for you is a pioneer in rendering HR Solutions across the Globe. It is a combined venture of leading and experienced HR Professionals & Masters.The company laid its roots from basics of HR Management, thereby bringing a unique approach to cater the requirements of our Clients." />
 
+	<meta property="og:title" content="Best For You HR Consultancy, Dubai, UAE | Find the Best Jobs in UAE, Job Consultant, HR Consultancy, Job Consultant Dubai, HR Consultancy Dubai, Jobs in Dubai, Jobs in Sharjah, Jobs in Ajman, Jobs in Ras Al Khaimah, Jobs in Abu Dhabi, Jobs in Fujairah,Jobs in Umm Al Quwain">
+    <meta property="og:site_name" content="Best For You HR Consultancy">
+    <meta property="og:url" content="https://best4uhr.com/">
+    <meta property="og:description" content="Best for you is a pioneer in rendering HR Solutions across the Globe. It is a combined venture of leading and experienced HR Professionals & Masters.The company laid its roots from basics of HR Management, thereby bringing a unique approach to cater the requirements of our Clients."/>
+    <meta property="og:image" content="https://best4uhr.com/images/logosoc.png"/>
+    <meta property="og:image:width" content="200"/>
+    <meta property="og:image:height" content="200"/>
     <!-- FAVICONS ICON -->
     <link rel="icon" href="{{ asset('images/favicon.ico') }}" type="image/x-icon">
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('images/favicon.png') }}">
 
     <!-- PAGE TITLE HERE -->
-    <title>Best For You HR Consultancy</title>
+    <title>Best For You HR Consultancy, Dubai, UAE | Find the Best Jobs in UAE</title>
 
     <!-- MOBILE SPECIFIC -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -855,6 +863,7 @@
         alert("{{ implode('\n', $errors->all()) }}");
     @endif
 </script>
+
 <script>
     // Get the radio buttons and select element
     const radioButtons = document.querySelectorAll('input[name="experience_region"]');

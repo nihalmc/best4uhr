@@ -1,9 +1,11 @@
 <?php
 
 namespace App\Console;
-use App\Console\Commands\CloseExpiredJobs;
+
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use App\Console\Commands\CloseExpiredJobs;
+use App\Console\Commands\ClearLogs;
 
 class Kernel extends ConsoleKernel
 {
@@ -13,8 +15,9 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        // Add your custom commands here
-        \App\Console\Commands\CloseExpiredJobs::class,
+            // Add your custom commands here
+        CloseExpiredJobs::class,
+        ClearLogs::class,
     ];
 
     /**
@@ -27,6 +30,9 @@ class Kernel extends ConsoleKernel
     {
         // Add your scheduled tasks here
         $schedule->command('jobs:close-expired')->daily();
+
+        // Clear log files every day at midnight
+        $schedule->command('logs:clear')->dailyAt('00:00');
     }
 
     /**
@@ -36,7 +42,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }

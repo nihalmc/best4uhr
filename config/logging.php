@@ -62,8 +62,10 @@ return [
             'driver' => 'single',
             'path' => storage_path('logs/laravel.log'),
             'level' => env('LOG_LEVEL', 'debug'),
+            'permission' => 0664, // Set the desired permission here
             'replace_placeholders' => true,
         ],
+
 
         'daily' => [
             'driver' => 'daily',

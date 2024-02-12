@@ -22,48 +22,54 @@ use Dompdf\Dompdf;
 use Dompdf\Options;
 use Illuminate\Support\Facades\Artisan;
 use App\Console\Commands\CloseExpiredJobs;
+use Carbon\Carbon;
 
 class AdminJobController extends Controller
 {
 
 
-    public function index(Request $request)
-    {
-        // Get the search query and selected status from the request
-        $search = $request->input('search');
-        $selectedStatus = $request->input('status');
+   public function index(Request $request)
+{
+    // Get the search query and selected status from the request
+    $search = $request->input('search');
+    $selectedStatus = $request->input('status');
 
-        // Query to fetch job listings based on search and status criteria
-        $query = Jobs::query();
+    // Query to fetch job listings based on search and status criteria
+    $query = Jobs::query();
 
-        if ($search) {
-            $query->where(function ($subquery) use ($search) {
-                $subquery->where('job_position', 'like', '%' . $search . '%')
-                    ->orWhere('location', 'like', '%' . $search . '%')
-                    ->orWhere('posted_date', 'like', '%' . $search . '%')
-                    ->orWhereHas('employer', function ($employerQuery) use ($search) {
-                        $employerQuery->where('company_name', 'like', '%' . $search . '%');
-                    });
-            });
-        }
-
-        if ($selectedStatus) {
-            $query->where('status', $selectedStatus);
-        }
-
-        // Order the jobs by posted_date in descending order
-        $jobs = $query->orderBy('posted_date', 'desc')->get();
-
-        return view('admin.job_listings', compact('jobs', 'selectedStatus'));
+    if ($search) {
+        $query->where(function ($subquery) use ($search) {
+            $subquery->where('job_position', 'like', '%' . $search . '%')
+                ->orWhere('location', 'like', '%' . $search . '%')
+                ->orWhere('posted_date', 'like', '%' . $search . '%')
+                ->orWhereHas('employer', function ($employerQuery) use ($search) {
+                    $employerQuery->where('company_name', 'like', '%' . $search . '%');
+                });
+        });
     }
+
+    // Filter based on the selected status
+    if ($selectedStatus) {
+        $query->where('status', $selectedStatus);
+    }
+
+    // Order the jobs by status and then by posted_date in descending order
+    $jobs = $query->orderByRaw('FIELD(status, "Open", "Closed")')->orderBy('posted_date', 'desc')->get();
+
+    return view('admin.job_listings', compact('jobs', 'selectedStatus'));
+}
+
 
  public function updateStatus(Jobs $job, $newStatus)
 {
     $validStatuses = ['Open', 'Closed']; // Add your valid statuses here
 
-    if ($newStatus == 'Open' && now() > $job->closing_date) {
-        return redirect()->route('admin.jobsdetails')->with('error', 'Cannot open job. Closing date has passed.');
-    }
+    // // Assuming $job->closing_date is in a format that Carbon can parse directly
+    // $closingDate = Carbon::parse($job->closing_date);
+
+    // if ($newStatus == 'Open' && now()->startOfDay() > $closingDate->endOfDay()) {
+    //     return redirect()->route('admin.jobsdetails')->with('error', 'Cannot open job. Closing date has passed.');
+    // }
 
     if (in_array($newStatus, $validStatuses)) {
         // Logic to change the job status
@@ -124,9 +130,10 @@ class AdminJobController extends Controller
         return redirect()->back()->with('error', 'Invalid status');
     }
 
-    public function show()
+public function show()
 {
-   $jobs = Jobs::orderBy('posted_date', 'desc')->get();
+    // Query to fetch open and closed job listings, ordered by status and then by posted_date in descending order
+    $jobs = Jobs::orderByRaw('FIELD(status, "Open", "Closed")')->orderBy('posted_date', 'desc')->get();
 
     // Iterate through the jobs and fetch the selected nationalities for each job
     foreach ($jobs as $job) {
@@ -135,6 +142,8 @@ class AdminJobController extends Controller
 
     return view('admin.jobs.index', compact('jobs'));
 }
+
+
 
 
    public function create()
@@ -155,8 +164,9 @@ class AdminJobController extends Controller
             'nationality' => 'required|array', // Validate as an array
             'gender' => 'required|string',
             'requirements' => 'required|string',
-            'posted_date' => 'required|date',
-            'closing_date' => 'required|date',
+            'posted_date' => 'required|date|before_or_equal:closing_date',
+             'closing_date' => 'required|date|after_or_equal:posted_date',
+
             'job_code' => 'required|string|unique:jobs,job_code,NULL,id', // Ensure job_code is unique in the jobs table
             'employer_id' => [
                 'required',
@@ -192,7 +202,7 @@ class AdminJobController extends Controller
     public function closeJobs()
 {
     $exitCode = Artisan::call('jobs:close-expired');
-    return redirect()->route('admin.jobListings')->with('success', 'Job closing triggered successfully.');
+    return redirect()->route('admin.jobListings')->with('success', 'Welcome Best For You Hr Website.');
 }
 
  public function edit($id)
@@ -221,8 +231,8 @@ class AdminJobController extends Controller
             'nationality' => 'required|array',
             'gender' => 'required|string',
             'requirements' => 'required|string',
-            'posted_date' => 'required|date',
-            'closing_date' => 'required|date',
+            'posted_date' => 'required|date|before_or_equal:closing_date',
+          'closing_date' => 'required|date|after_or_equal:posted_date',
             'job_code' => [
                 'required',
                 'string',
@@ -267,6 +277,8 @@ class AdminJobController extends Controller
         return view('admin.cvenquiry', ['cvenquiry' => $cvenquiry]);
     }
 
+
+
     public function showjob($id)
     {
         $job = Jobs::findOrFail($id);
@@ -282,6 +294,29 @@ class AdminJobController extends Controller
         return redirect()->route('admin.display')->with('success', 'Job Cv deleted successfully');
     }
 
+    public function generatePdf()
+    {
+        $cvenquiry = Freedetails::orderBy('created_at', 'desc')->get();
+    
+        // Load the PDF view content
+        $htmlContent = view('admin.cvenquiry_pdf', compact('cvenquiry'))->render();
+    
+        // Load HTML content and generate PDF
+        $pdf = PDF::loadHTML($htmlContent);
+    
+        // (Optional) Set paper size and orientation
+        $pdf->setPaper('a4', 'landscape');
+    
+        // Convert PDF to a string
+        $pdfString = $pdf->output();
+    
+        // Output the generated PDF (either to the browser or save it to a file)
+        // return $pdf->download('cvenquiry_report.pdf');
+    
+        // Use response() to inspect the generated PDF
+        return response($pdfString)->header('Content-Type', 'application/pdf');
+    }
+    
 
 public function downloadAllFiles()
 {
@@ -319,6 +354,20 @@ public function closeExpiredJobs()
     return redirect()->route('admin.jobs.index')->with('success', 'Expired jobs Closed successfully.');
 }
 
+    public function clearLogs()
+    {
+        // Call the 'logs:clear' command
+        Artisan::call('logs:clear');
 
+        // Get the output of the command (optional)
+        $output = Artisan::output();
+
+        // Handle the output if needed
+        // For example, you can log or display it
+        // logger($output);
+        // return $output;
+
+        return "Log files cleared successfully.";
+    }
 
 }

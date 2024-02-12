@@ -168,18 +168,6 @@
             @endif</p>
                 <p>Gender: {{ $job->gender }}</p>
                 <p>Requirements: {{ $job->requirements }}</p>
-                <p>Posted Date: {{ date('d/m/Y', strtotime($job->posted_date)) }}</p>
-                <p>Closing Date: {{ date('d/m/Y', strtotime($job->closing_date )) }}</p>
-                <p style="color:
-                @if ($job->status === 'pending')
-                    orange
-                @elseif ($job->status === 'Open')
-                    green
-                @elseif ($job->status === 'Closed')
-                    red
-                {{-- Add more conditions for other status values as needed --}}
-                @endif
-                ">Status: {{ $job->status }}</p>
             </div>
 <div class="modal-footer">
        <button type="button" class="site-button" onclick="copyJobDetails({{ $job->id }})">Copy Details</button>

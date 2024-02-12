@@ -5,7 +5,6 @@ namespace App\Console\Commands;
 use App\Models\Jobs;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Config;
 
 class CloseExpiredJobs extends Command
 {
@@ -15,17 +14,12 @@ class CloseExpiredJobs extends Command
     public function handle()
     {
         try {
-            // Get the timezone from your configuration
-            $timezone = Config::get('app.timezone');
-
-            // Set the timezone for this operation
-            date_default_timezone_set($timezone);
-
             $now = now();
 
             // Find jobs that are open and have a closing date in the past
             $expiredJobs = Jobs::where('status', 'Open')
-                ->where('closing_date', '<', $now)
+                ->where('closing_date', '<=', $now)
+ ->whereDate('closing_date', '<>', $now->toDateString())
                 ->get();
 
             $expiredJobsCount = $expiredJobs->count();
